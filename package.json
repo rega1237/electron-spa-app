@@ -1,9 +1,9 @@
 {
   "name": "pro-salud-spa",
   "version": "1.0.0",
-  "description": "An Electron application with React",
+  "description": "An Electron application to manage a spa",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "Rafael Guzman",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
