@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom'
 import NewClient from '../Forms/NewClient'
 
-const ModalAccount = ({ formType, handleToggleModal }) => {
+const ModalAccount = ({ formType, handleToggleModal, turso, setInfo }) => {
   const modalContainer = document.getElementById('modal')
 
   if (!modalContainer) {
@@ -9,7 +9,10 @@ const ModalAccount = ({ formType, handleToggleModal }) => {
   }
 
   if (formType === 'newClient') {
-    return createPortal(<NewClient handleToggleModal={handleToggleModal} />, modalContainer)
+    return createPortal(
+      <NewClient handleToggleModal={handleToggleModal} turso={turso} setInfo={setInfo} />,
+      modalContainer
+    )
   }
 }
 
