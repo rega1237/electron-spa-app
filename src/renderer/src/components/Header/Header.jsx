@@ -1,7 +1,7 @@
 import solIcon from '../../assets/images/sol-pro-salud.webp'
 import Input from '../UI/Input'
 
-const Header = ({handleToggleModal}) => {
+const Header = ({ handleToggleModal }) => {
   return (
     <div className="mb-6 flex items-center justify-between">
       <div className="flex items-center gap-5">
