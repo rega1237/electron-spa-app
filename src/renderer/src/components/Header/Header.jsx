@@ -1,7 +1,7 @@
 import solIcon from '../../assets/images/sol-pro-salud.webp'
 import Input from '../UI/Input'
 
-const Header = ({ handleToggleModal }) => {
+const Header = ({ handleToggleModal, pacientes, setSearch }) => {
   return (
     <div className="mb-6 flex items-center justify-between">
       <div className="flex items-center gap-5">
@@ -11,7 +11,12 @@ const Header = ({ handleToggleModal }) => {
       <div className="flex items-center gap-4">
         <div className="relative w-full max-w-md">
           <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"></div>
-          <Input placeHolder="Buscar Paciente..." type="search" />
+          <Input
+            placeHolder="Buscar Paciente..."
+            type="search"
+            pacientes={pacientes}
+            setSearch={setSearch}
+          />
         </div>
         <button
           className="inline-flex h-9 cursor-pointer items-center justify-center whitespace-nowrap rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
