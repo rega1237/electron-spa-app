@@ -8,6 +8,7 @@ import ModalAccount from './components/Modal/ModalContainer'
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [pacientes, setPacientes] = useState([])
+  const [search, setSearch] = useState('')
 
   const ipcHandle = () => window.electron.ipcRenderer.send('ping')
 
@@ -45,8 +46,8 @@ function App() {
   return (
     <>
       <div className="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
-        <Header handleToggleModal={handleToggleModal} />
-        <TableBody pacientes={pacientes} />
+        <Header handleToggleModal={handleToggleModal} pacientes={pacientes} setSearch={setSearch} />
+        <TableBody pacientes={pacientes} search={search} />
       </div>
 
       {isModalOpen && (

@@ -1,9 +1,9 @@
 import TablePacienteRow from './TablePacienteRow'
 
-const TableBody = ({ pacientes }) => {
+const TableBody = ({ pacientes, search }) => {
   return (
     <div className="overflow-hidden rounded-lg border">
-      <div className="relative w-full h-[500px] overflow-auto">
+      <div className="relative h-[500px] w-full overflow-auto">
         <table className="w-full caption-bottom text-sm">
           <thead className="[&_tr]:border-b">
             <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
@@ -19,9 +19,11 @@ const TableBody = ({ pacientes }) => {
             </tr>
           </thead>
           <tbody className="[&_tr:last-child]:border-0">
-            {pacientes.map((paciente) => (
-              <TablePacienteRow key={paciente.id} paciente={paciente} />
-            ))}
+            {search.length > 0
+              ? search.map((paciente) => <TablePacienteRow key={paciente.id} paciente={paciente} />)
+              : pacientes.map((paciente) => (
+                  <TablePacienteRow key={paciente.id} paciente={paciente} />
+                ))}
           </tbody>
         </table>
       </div>
