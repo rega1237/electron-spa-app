@@ -1,9 +1,11 @@
+import { Link } from 'react-router-dom'
 import patientPlaceholder from '../../assets/images/placeholder-user.webp'
+
 const TablePacienteRow = ({ paciente }) => {
   return (
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
       <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-        <div className="flex items-center gap-3">
+        <Link className="flex items-center gap-3" to={`/${paciente.id}`}>
           <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
             <img
               className="aspect-square h-full w-full"
@@ -15,7 +17,7 @@ const TablePacienteRow = ({ paciente }) => {
             <p className="font-medium">{paciente.nombre_completo}</p>
             <p className="text-sm text-muted-foreground">{paciente.cedula}</p>
           </div>
-        </div>
+        </Link>
       </td>
       <td className="[&amp;:has([role=checkbox])]:pr-0 p-4 align-middle">
         <div className="flex flex-col gap-1">
