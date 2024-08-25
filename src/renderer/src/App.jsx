@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { createClient } from '@libsql/client'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Header from './components/Header/Header'
 import TableBody from './components/Pacientes/TableBody'
+import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
 
 function App() {
@@ -45,19 +47,28 @@ function App() {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
-        <Header handleToggleModal={handleToggleModal} pacientes={pacientes} setSearch={setSearch} />
-        <TableBody pacientes={pacientes} search={search} />
-      </div>
+      <Router>
+        <div className="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
+          <Header
+            handleToggleModal={handleToggleModal}
+            pacientes={pacientes}
+            setSearch={setSearch}
+          />
+          <Routes>
+            <Route path="/" element={<TableBody pacientes={pacientes} search={search} />} />
+            <Route path="/:pacienteID" element={<Paciente pacientes={pacientes} />} />
+          </Routes>
+        </div>
 
-      {isModalOpen && (
-        <ModalAccount
-          formType="newClient"
-          handleToggleModal={handleToggleModal}
-          turso={turso}
-          setInfo={setPacientes}
-        />
-      )}
+        {isModalOpen && (
+          <ModalAccount
+            formType="newClient"
+            handleToggleModal={handleToggleModal}
+            turso={turso}
+            setInfo={setPacientes}
+          />
+        )}
+      </Router>
     </>
   )
 }
