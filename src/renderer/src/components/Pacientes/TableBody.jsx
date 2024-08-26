@@ -1,6 +1,6 @@
 import TablePacienteRow from './TablePacienteRow'
 
-const TableBody = ({ pacientes, search }) => {
+const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente }) => {
   return (
     <div className="overflow-hidden rounded-lg border">
       <div className="relative h-[500px] w-full overflow-auto">
@@ -20,9 +20,21 @@ const TableBody = ({ pacientes, search }) => {
           </thead>
           <tbody className="[&_tr:last-child]:border-0">
             {search.length > 0
-              ? search.map((paciente) => <TablePacienteRow key={paciente.id} paciente={paciente} />)
+              ? search.map((paciente) => (
+                  <TablePacienteRow
+                    key={paciente.id}
+                    paciente={paciente}
+                    toggleNewAppointment={toggleNewAppointment}
+                    setPaciente={setPaciente}
+                  />
+                ))
               : pacientes.map((paciente) => (
-                  <TablePacienteRow key={paciente.id} paciente={paciente} />
+                  <TablePacienteRow
+                    key={paciente.id}
+                    paciente={paciente}
+                    toggleNewAppointment={toggleNewAppointment}
+                    setPaciente={setPaciente}
+                  />
                 ))}
           </tbody>
         </table>

@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import patientPlaceholder from '../../assets/images/placeholder-user.webp'
 
-const TablePacienteRow = ({ paciente }) => {
+const TablePacienteRow = ({ paciente, toggleNewAppointment, setPaciente }) => {
+  const openAppointmentModal = () => {
+    setPaciente(paciente)
+    toggleNewAppointment()
+  }
+
   return (
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
       <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
@@ -26,7 +31,10 @@ const TablePacienteRow = ({ paciente }) => {
       </td>
       <td className="[&amp;:has([role=checkbox])]:pr-0 p-4 align-middle" data-id="30">
         <div className="flex items-center gap-2" data-id="31">
-          <button className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+          <button
+            className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            onClick={openAppointmentModal}
+          >
             Agendar Cita
           </button>
           <button className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
