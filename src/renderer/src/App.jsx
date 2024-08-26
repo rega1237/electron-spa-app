@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { createClient } from '@libsql/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -7,42 +7,33 @@ import TableBody from './components/Pacientes/TableBody'
 import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
 
+import useGetPacientes from './hooks/useGetPacientes'
+import useGetCitas from './hooks/useGetCitas'
+
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalNewPatientOpen, setIsModalNewPatientOpen] = useState(false)
+  const [isModalNewAppointmentOpen, setIsModalNewAppointmentOpen] = useState(false)
   const [pacientes, setPacientes] = useState([])
+  const [paciente, setPaciente] = useState({})
+  const [citas, setCitas] = useState([])
   const [search, setSearch] = useState('')
 
   const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-
-  useEffect(() => {
-    const storedPacientes = localStorage.getItem('pacientes')
-
-    if (storedPacientes) {
-      setPacientes(JSON.parse(storedPacientes))
-      return
-    }
-
-    const getPacientes = async () => {
-      try {
-        const pacientes = await turso.execute('SELECT * FROM pacientes')
-        setPacientes(pacientes.rows)
-        localStorage.setItem('pacientes', JSON.stringify(pacientes.rows))
-      } catch (error) {
-        alert('Error al obtener los pacientes')
-        console.error(error)
-      }
-    }
-
-    getPacientes()
-  }, [])
 
   const turso = createClient({
     url: import.meta.env.VITE_URL,
     authToken: import.meta.env.VITE_API_KEY
   })
 
-  const handleToggleModal = () => {
-    setIsModalOpen(!isModalOpen)
+  useGetPacientes({ setPacientes, turso })
+  useGetCitas({ setCitas, turso })
+
+  const handleToggleNewPatientModal = () => {
+    setIsModalNewPatientOpen(!isModalNewPatientOpen)
+  }
+
+  const handleToggleNewAppointmentModal = () => {
+    setIsModalNewAppointmentOpen(!isModalNewAppointmentOpen)
   }
 
   return (
@@ -50,22 +41,42 @@ function App() {
       <Router>
         <div className="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
           <Header
-            handleToggleModal={handleToggleModal}
+            handleToggleModal={handleToggleNewPatientModal}
             pacientes={pacientes}
             setSearch={setSearch}
           />
           <Routes>
-            <Route path="/" element={<TableBody pacientes={pacientes} search={search} />} />
+            <Route
+              path="/"
+              element={
+                <TableBody
+                  pacientes={pacientes}
+                  search={search}
+                  toggleNewAppointment={handleToggleNewAppointmentModal}
+                  setPaciente={setPaciente}
+                />
+              }
+            />
             <Route path="/:pacienteID" element={<Paciente pacientes={pacientes} />} />
           </Routes>
         </div>
 
-        {isModalOpen && (
+        {isModalNewPatientOpen && (
           <ModalAccount
             formType="newClient"
-            handleToggleModal={handleToggleModal}
+            handleToggleModal={handleToggleNewPatientModal}
             turso={turso}
             setInfo={setPacientes}
+          />
+        )}
+
+        {isModalNewAppointmentOpen && (
+          <ModalAccount
+            formType="newAppointment"
+            handleToggleModal={handleToggleNewAppointmentModal}
+            turso={turso}
+            paciente={paciente}
+            setInfo={setCitas}
           />
         )}
       </Router>
