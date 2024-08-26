@@ -9,27 +9,29 @@ const NewClient = ({ handleToggleModal, turso, setInfo }) => {
     e.preventDefault()
 
     try {
-      const pacientes = JSON.parse(localStorage.getItem('pacientes'))
-      const IdPaciente = pacientes.length + 1
-      await turso.execute({
-        sql: 'INSERT INTO pacientes VALUES (:id, :nombre_completo, :cedula,  :telefono)',
-        args: { id: IdPaciente, nombre_completo: nombre, cedula: cedula, telefono: telefono }
-      })
+      const pacientes = JSON.parse(localStorage.getItem('pacientes')) || []
 
-      setInfo([...pacientes, { id: IdPaciente, nombre_completo: nombre, cedula, telefono }])
+      const sqlAction =  await turso.execute({
+        sql: 'INSERT INTO pacientes (nombre_completo, cedula, telefono) VALUES (:nombre_completo, :cedula,  :telefono)',
+        args: { nombre_completo: nombre, cedula: cedula, telefono: telefono }
+      })
+      
+      const id = parseInt(sqlAction.lastInsertRowid.toString())
+
+      setInfo([...pacientes, { id: id, nombre_completo: nombre, cedula, telefono }])
       localStorage.setItem(
         'pacientes',
         JSON.stringify([
           ...pacientes,
-          { id: IdPaciente, nombre_completo: nombre, cedula, telefono }
+          { id: id, nombre_completo: nombre, cedula, telefono }
         ])
       )
 
       e.target.reset()
       handleToggleModal()
     } catch (error) {
-      alert('Error al guardar el paciente')
       console.error(error)
+      alert('Error al guardar el paciente')
     }
   }
 
