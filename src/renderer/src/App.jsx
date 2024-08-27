@@ -13,6 +13,7 @@ import useGetCitas from './hooks/useGetCitas'
 function App() {
   const [isModalNewPatientOpen, setIsModalNewPatientOpen] = useState(false)
   const [isModalNewAppointmentOpen, setIsModalNewAppointmentOpen] = useState(false)
+  const [isModalNewHistoryOpen, setIsModalNewHistoryOpen] = useState(false)
   const [pacientes, setPacientes] = useState([])
   const [paciente, setPaciente] = useState({})
   const [citas, setCitas] = useState([])
@@ -36,6 +37,10 @@ function App() {
     setIsModalNewAppointmentOpen(!isModalNewAppointmentOpen)
   }
 
+  const handleToggleNewHistoryModal = () => {
+    setIsModalNewHistoryOpen(!isModalNewHistoryOpen)
+  }
+
   return (
     <>
       <Router>
@@ -53,6 +58,7 @@ function App() {
                   pacientes={pacientes}
                   search={search}
                   toggleNewAppointment={handleToggleNewAppointmentModal}
+                  toggleNewHistory={handleToggleNewHistoryModal}
                   setPaciente={setPaciente}
                 />
               }
@@ -77,6 +83,16 @@ function App() {
             turso={turso}
             paciente={paciente}
             setInfo={setCitas}
+          />
+        )}
+
+        {isModalNewHistoryOpen && (
+          <ModalAccount
+            formType="newHistory"
+            handleToggleModal={handleToggleNewHistoryModal}
+            turso={turso}
+            setInfo={setPacientes}
+            paciente={paciente}
           />
         )}
       </Router>

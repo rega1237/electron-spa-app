@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom'
 import patientPlaceholder from '../../assets/images/placeholder-user.webp'
 
-const TablePacienteRow = ({ paciente, toggleNewAppointment, setPaciente }) => {
+const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory, setPaciente }) => {
   const openAppointmentModal = () => {
     setPaciente(paciente)
     toggleNewAppointment()
+  }
+
+  const openHistoryModal = () => {
+    setPaciente(paciente)
+    toggleNewHistory()
   }
 
   return (
@@ -37,7 +42,10 @@ const TablePacienteRow = ({ paciente, toggleNewAppointment, setPaciente }) => {
           >
             Agendar Cita
           </button>
-          <button className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+          <button
+            className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            onClick={openHistoryModal}
+          >
             Crear Historia
           </button>
           <button className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">

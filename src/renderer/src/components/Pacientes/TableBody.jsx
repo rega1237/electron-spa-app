@@ -1,6 +1,6 @@
 import TablePacienteRow from './TablePacienteRow'
 
-const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente }) => {
+const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente, toggleNewHistory }) => {
   return (
     <div className="overflow-hidden rounded-lg border">
       <div className="relative h-[500px] w-full overflow-auto">
@@ -25,6 +25,7 @@ const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente }) => 
                     key={paciente.id}
                     paciente={paciente}
                     toggleNewAppointment={toggleNewAppointment}
+                    toggleNewHistory={toggleNewHistory}
                     setPaciente={setPaciente}
                   />
                 ))
@@ -33,6 +34,7 @@ const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente }) => 
                     key={paciente.id}
                     paciente={paciente}
                     toggleNewAppointment={toggleNewAppointment}
+                    toggleNewHistory={toggleNewHistory}
                     setPaciente={setPaciente}
                   />
                 ))}
