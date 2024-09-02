@@ -5,7 +5,9 @@ const InputText = ({ item, index, onChange }) => {
       <input
         type="text"
         id={item}
+        name={item}
         className="border-b bg-transparent p-2 focus-visible:outline-none"
+        onChange={onChange}
       />
     </div>
   )
