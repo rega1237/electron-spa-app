@@ -1,15 +1,18 @@
 import { Link } from 'react-router-dom'
 import patientPlaceholder from '../../assets/images/placeholder-user.webp'
+import { usePaciente } from '../../store/store'
 
-const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory, setPaciente }) => {
+const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory }) => {
+  const setPaciente = usePaciente((state) => state.setPaciente)
+
   const openAppointmentModal = () => {
-    setPaciente(paciente)
     toggleNewAppointment()
+    setPaciente(paciente)
   }
 
   const openHistoryModal = () => {
-    setPaciente(paciente)
     toggleNewHistory()
+    setPaciente(paciente)
   }
 
   return (

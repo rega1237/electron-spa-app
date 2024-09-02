@@ -1,4 +1,8 @@
-const Input = ({ placeHolder, type, pacientes, setSearch }) => {
+import { usePaciente } from '../../store/store'
+
+const Input = ({ placeHolder, type, setSearch }) => {
+  const pacientes = usePaciente((state) => state.pacientes)
+
   const handleSearch = (e) => {
     const searchValue = e.target.value
     const filteredPacientes = pacientes.filter((paciente) => {

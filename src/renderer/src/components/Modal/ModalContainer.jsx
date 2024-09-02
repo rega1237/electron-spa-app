@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom'
-import NewClient from '../Forms/NewClient'
-import Newappointment from '../Forms/NewAppointment'
+import NewClient from '../Forms/NewPatientForm/NewClient'
+import Newappointment from '../Forms/NewAppointment/NewAppointment'
 import NewHistory from '../Forms/HistoryForm/NewHistory'
 
 const ModalAccount = ({ formType, handleToggleModal, turso, setInfo, paciente }) => {
@@ -11,30 +11,11 @@ const ModalAccount = ({ formType, handleToggleModal, turso, setInfo, paciente })
   }
 
   if (formType === 'newClient') {
-    return createPortal(
-      <NewClient handleToggleModal={handleToggleModal} turso={turso} setInfo={setInfo} />,
-      modalContainer
-    )
+    return createPortal(<NewClient handleToggleModal={handleToggleModal} />, modalContainer)
   } else if (formType === 'newAppointment') {
-    return createPortal(
-      <Newappointment
-        handleToggleModal={handleToggleModal}
-        turso={turso}
-        setInfo={setInfo}
-        paciente={paciente}
-      />,
-      modalContainer
-    )
+    return createPortal(<Newappointment handleToggleModal={handleToggleModal} />, modalContainer)
   } else if (formType === 'newHistory') {
-    return createPortal(
-      <NewHistory
-        handleToggleModal={handleToggleModal}
-        turso={turso}
-        setInfo={setInfo}
-        paciente={paciente}
-      />,
-      modalContainer
-    )
+    return createPortal(<NewHistory handleToggleModal={handleToggleModal} />, modalContainer)
   }
 }
 

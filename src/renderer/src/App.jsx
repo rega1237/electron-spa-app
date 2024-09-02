@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createClient } from '@libsql/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -7,16 +7,12 @@ import TableBody from './components/Pacientes/TableBody'
 import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
 
-import useGetPacientes from './hooks/useGetPacientes'
-import useGetCitas from './hooks/useGetCitas'
+import { usePaciente, useCitas } from './store/store'
 
 function App() {
   const [isModalNewPatientOpen, setIsModalNewPatientOpen] = useState(false)
   const [isModalNewAppointmentOpen, setIsModalNewAppointmentOpen] = useState(false)
   const [isModalNewHistoryOpen, setIsModalNewHistoryOpen] = useState(false)
-  const [pacientes, setPacientes] = useState([])
-  const [paciente, setPaciente] = useState({})
-  const [citas, setCitas] = useState([])
   const [search, setSearch] = useState('')
 
   const ipcHandle = () => window.electron.ipcRenderer.send('ping')
@@ -26,8 +22,15 @@ function App() {
     authToken: import.meta.env.VITE_API_KEY
   })
 
-  useGetPacientes({ setPacientes, turso })
-  useGetCitas({ setCitas, turso })
+  const pacientes = usePaciente((state) => state.pacientes)
+  const getPacientes = usePaciente((state) => state.getPacientes)
+  const paciente = usePaciente((state) => state.paciente)
+  const getCitas = useCitas((state) => state.getCitas)
+
+  useEffect(() => {
+    getPacientes()
+    getCitas()
+  }, [])
 
   const handleToggleNewPatientModal = () => {
     setIsModalNewPatientOpen(!isModalNewPatientOpen)
@@ -45,55 +48,35 @@ function App() {
     <>
       <Router>
         <div className="mx-auto w-full max-w-6xl p-4 sm:p-6 md:p-8">
-          <Header
-            handleToggleModal={handleToggleNewPatientModal}
-            pacientes={pacientes}
-            setSearch={setSearch}
-          />
+          <Header handleToggleModal={handleToggleNewPatientModal} setSearch={setSearch} />
           <Routes>
             <Route
               path="/"
               element={
                 <TableBody
-                  pacientes={pacientes}
                   search={search}
                   toggleNewAppointment={handleToggleNewAppointmentModal}
                   toggleNewHistory={handleToggleNewHistoryModal}
-                  setPaciente={setPaciente}
                 />
               }
             />
-            <Route path="/:pacienteID" element={<Paciente pacientes={pacientes} />} />
+            <Route path="/:pacienteID" element={<Paciente />} />
           </Routes>
         </div>
 
         {isModalNewPatientOpen && (
-          <ModalAccount
-            formType="newClient"
-            handleToggleModal={handleToggleNewPatientModal}
-            turso={turso}
-            setInfo={setPacientes}
-          />
+          <ModalAccount formType="newClient" handleToggleModal={handleToggleNewPatientModal} />
         )}
 
         {isModalNewAppointmentOpen && (
           <ModalAccount
             formType="newAppointment"
             handleToggleModal={handleToggleNewAppointmentModal}
-            turso={turso}
-            paciente={paciente}
-            setInfo={setCitas}
           />
         )}
 
         {isModalNewHistoryOpen && (
-          <ModalAccount
-            formType="newHistory"
-            handleToggleModal={handleToggleNewHistoryModal}
-            turso={turso}
-            setInfo={setPacientes}
-            paciente={paciente}
-          />
+          <ModalAccount formType="newHistory" handleToggleModal={handleToggleNewHistoryModal} />
         )}
       </Router>
     </>

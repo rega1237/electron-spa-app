@@ -1,14 +1,21 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { usePaciente } from '../../store/store'
 
-const Paciente = ({ pacientes }) => {
+const Paciente = () => {
   const { pacienteID } = useParams()
 
-  const [paciente, setPaciente] = useState(null)
+  const pacientes = usePaciente((state) => state.pacientes)
+  const paciente = usePaciente((state) => state.paciente)
+  const setPaciente = usePaciente((state) => state.setPaciente)
+
+  const handlePaciente = async (paciente) => {
+    await setPaciente(paciente)
+  }
 
   useEffect(() => {
-    const paciente = pacientes.find((paciente) => paciente.id == pacienteID)
-    setPaciente(paciente)
+    const searchPaciente = pacientes.find((paciente) => paciente.id === parseInt(pacienteID))
+    handlePaciente(searchPaciente)
   }, [pacienteID])
 
   return (

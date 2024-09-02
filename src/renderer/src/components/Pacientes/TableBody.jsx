@@ -1,6 +1,9 @@
 import TablePacienteRow from './TablePacienteRow'
+import { usePaciente } from '../../store/store'
 
-const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente, toggleNewHistory }) => {
+const TableBody = ({ search, toggleNewAppointment, toggleNewHistory }) => {
+  const pacientes = usePaciente((state) => state.pacientes)
+
   return (
     <div className="overflow-hidden rounded-lg border">
       <div className="relative h-[500px] w-full overflow-auto">
@@ -26,7 +29,6 @@ const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente, toggl
                     paciente={paciente}
                     toggleNewAppointment={toggleNewAppointment}
                     toggleNewHistory={toggleNewHistory}
-                    setPaciente={setPaciente}
                   />
                 ))
               : pacientes.map((paciente) => (
@@ -35,7 +37,6 @@ const TableBody = ({ pacientes, search, toggleNewAppointment, setPaciente, toggl
                     paciente={paciente}
                     toggleNewAppointment={toggleNewAppointment}
                     toggleNewHistory={toggleNewHistory}
-                    setPaciente={setPaciente}
                   />
                 ))}
           </tbody>
