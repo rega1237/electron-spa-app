@@ -1,18 +1,95 @@
+import { useState } from 'react'
+
 import {
   facialHistoryClinicBackground,
   facialHistoryAestheticBackground,
   tipologiaCutanea,
   cuidadoPiel,
-  patologiasCutaneas
+  patologiasCutaneas,
+  data
 } from '../../../Constants/formConstants'
+
+import { handleCheckBox, handleSelect, handleText, handleTextArea } from './handleFunctions'
+
+import { usePaciente } from '../../../store/store'
+import { useHistoriaFacial } from '../../../store/store'
 
 import InputCheckbox from '../../UI/InputCheckbox'
 import InputText from '../../UI/InputText'
 
-const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
-  const handleSubmit = (e) => {
+const NewHistory = ({ handleToggleModal }) => {
+  const paciente = usePaciente((state) => state.paciente)
+  const addHistoriaFacial = useHistoriaFacial((state) => state.addHistoriaFacial)
+
+  const [facialClinic, setFacialClinic] = useState({ ...facialHistoryClinicBackground })
+  const [facialAesthetic, setFacialAesthetic] = useState({ ...facialHistoryAestheticBackground })
+  const [fototipo, setFototipo] = useState('')
+  const [tipologia, setTipologia] = useState({ ...tipologiaCutanea })
+  const [cuidadoDePiel, setCuidadoDePiel] = useState({ ...cuidadoPiel })
+  const [patologias, setPatologias] = useState({ ...patologiasCutaneas })
+  const [notas, setNotas] = useState('')
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('submit')
+
+    const SendData = {
+      ...data,
+      paciente_id: paciente.id,
+      clinic_diabetes: facialClinic.Diabetes,
+      clinic_cancer: facialClinic.Cancer,
+      clinic_alergias: facialClinic.Alergias,
+      clinic_anemia: facialClinic.Anemia,
+      clinic_hipertension_arterial: facialClinic.Hipertensión,
+      clinic_enfermedades_renales: facialClinic['Enfermedades Renales'],
+      clinic_medicamentos_actuales: facialClinic['Medicamentos Actuales'],
+      estetica_implante: facialAesthetic['Implante o injertos'],
+      estetica_cirugias: facialAesthetic['Cirugias estéticas'],
+      estetica_tratamientos: facialAesthetic['Tratamientos estéticos no invasivos'],
+      estetica_botox: facialAesthetic.Botox,
+      estetica_acido_hialuronico: facialAesthetic['Acido hialuronico'],
+      estetica_mesoterapia: facialAesthetic['Mesoterapia facial'],
+      estetica_dermapen: facialAesthetic.Dermapen,
+      estetica_hilos_tensores: facialAesthetic['Hilos tensores'],
+      estetica_otros: facialAesthetic.Otros,
+      tipologia_seca: tipologia.Seca,
+      tipologia_normal: tipologia.Normal,
+      tipologia_grasa: tipologia.Grasa,
+      tipologia_mixta: tipologia.Mixta,
+      tipologia_sensible: tipologia.Sensible,
+      tipologia_asfixiada: tipologia.Asfixiada,
+      tipologia_deshidratada: tipologia.Deshidratada,
+      tipologia_desvitalizada: tipologia.Desvitalizada,
+      tipologia_otro: tipologia.Otro,
+      fototipo_piel: fototipo,
+      cuidado_limpieza: cuidadoDePiel.Limpieza,
+      cuidado_hidratacion: cuidadoDePiel.Hidratacion,
+      cuidado_proteccion_solar: cuidadoDePiel['Proteccion solar'],
+      cuidado_exfoliacion: cuidadoDePiel.Exfoliacion,
+      cuidado_limpieza_profunda: cuidadoDePiel['Limpieza profunda'],
+      cuidado_mascarillas: cuidadoDePiel.Mascarillas,
+      cuidado_otro: cuidadoDePiel.Otro,
+      patologias_eritema: patologias.Eritema,
+      patologias_comedones: patologias.Comedones,
+      patologias_pustulas: patologias.Pustulas,
+      patologias_cicatrices: patologias.Cicatrices,
+      patologias_papulas: patologias.Papulas,
+      patologias_millium: patologias.Millium,
+      patologias_vitiligo: patologias.Vitiligo,
+      patologias_melasma: patologias.Melasma,
+      patologias_arrugas: patologias.Arrugas,
+      patologias_efelides: patologias.Efelides,
+      patologias_hiperpigmentaciones: patologias.Hiperpigmentaciones,
+      patologias_rosacea: patologias.Rosacea,
+      patologias_piel_tendencia_acneica: patologias['Piel con tendencia acneica'],
+      patologias_tipo_acne: patologias['Tipo de acne'],
+      patologias_grado_acne: patologias['Grado de acne'],
+      patologias_causas_acne: patologias['Causas del acne'],
+      facial_notas: notas
+    }
+
+    await addHistoriaFacial(SendData)
+
+    handleToggleModal()
   }
 
   return (
@@ -34,7 +111,23 @@ const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
               <h3 className="w-[200px] border-b text-lg font-semibold">Atecedentes Clinicos</h3>
               <div className="mt-3 grid grid-cols-3 gap-4">
                 {Object.keys(facialHistoryClinicBackground).map((item, index) => {
-                  return <InputCheckbox index={index} item={item} onChange={() => {}} />
+                  if (item === 'Medicamentos Actuales') {
+                    return (
+                      <InputText
+                        item={item}
+                        key={index}
+                        onChange={(e) => handleText(e, facialClinic, setFacialClinic)}
+                      />
+                    )
+                  }
+
+                  return (
+                    <InputCheckbox
+                      key={index}
+                      item={item}
+                      onChange={(e) => handleCheckBox(e, facialClinic, setFacialClinic)}
+                    />
+                  )
                 })}
               </div>
             </div>
@@ -45,7 +138,27 @@ const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
               </h3>
               <div className="mt-3 grid grid-cols-3 gap-4">
                 {Object.keys(facialHistoryAestheticBackground).map((item, index) => {
-                  return <InputCheckbox index={index} item={item} onChange={() => {}} />
+                  if (item === 'Otros') {
+                    return (
+                      <InputText
+                        item={item}
+                        key={index}
+                        onChange={(e) => {
+                          handleText(e, facialAesthetic, setFacialAesthetic)
+                        }}
+                      />
+                    )
+                  }
+
+                  return (
+                    <InputCheckbox
+                      key={index}
+                      item={item}
+                      onChange={(e) => {
+                        handleCheckBox(e, facialAesthetic, setFacialAesthetic)
+                      }}
+                    />
+                  )
                 })}
               </div>
             </div>
@@ -54,7 +167,7 @@ const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
               <div>
                 <h3 className="mt-5 w-[200px] border-b text-lg font-semibold">Fototipo de piel</h3>
                 <div className="mt-3 flex flex-1 items-center gap-2">
-                  <select>
+                  <select onChange={(e) => handleSelect(e, fototipo, setFototipo)}>
                     <option value="">Selecciona un fototipo</option>
                     <option value="I">I</option>
                     <option value="II">II</option>
@@ -71,10 +184,26 @@ const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
                 <div className="mt-3 grid grid-cols-2 items-center gap-2">
                   {Object.keys(tipologiaCutanea).map((item, index) => {
                     if (item === 'Otro') {
-                      return <InputText item={item} index={index} onChange={() => {}} />
+                      return (
+                        <InputText
+                          item={item}
+                          key={index}
+                          onChange={(e) => {
+                            handleText(e, tipologia, setTipologia)
+                          }}
+                        />
+                      )
                     }
 
-                    return <InputCheckbox index={index} item={item} onChange={() => {}} />
+                    return (
+                      <InputCheckbox
+                        key={index}
+                        item={item}
+                        onChange={(e) => {
+                          handleCheckBox(e, tipologia, setTipologia)
+                        }}
+                      />
+                    )
                   })}
                 </div>
               </div>
@@ -86,7 +215,15 @@ const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
               </h3>
               <div className="mt-3 grid grid-cols-2 gap-4">
                 {Object.keys(cuidadoPiel).map((item, index) => {
-                  return <InputText item={item} index={index} onChange={() => {}} />
+                  return (
+                    <InputText
+                      item={item}
+                      key={index}
+                      onChange={(e) => {
+                        handleText(e, cuidadoDePiel, setCuidadoDePiel)
+                      }}
+                    />
+                  )
                 })}
               </div>
             </div>
@@ -97,18 +234,49 @@ const NewHistory = ({ handleToggleModal, turso, paciente, setInfo }) => {
                 {Object.keys(patologiasCutaneas).map((item, index) => {
                   if (item.includes('acn')) {
                     if (item.includes('Piel')) {
-                      return <InputCheckbox item={item} index={index} onChange={() => {}} />
+                      return (
+                        <InputCheckbox
+                          item={item}
+                          key={index}
+                          onChange={(e) => {
+                            handleCheckBox(e, patologias, setPatologias)
+                          }}
+                        />
+                      )
                     }
 
-                    return <InputText item={item} index={index} onChange={() => {}} />
+                    return (
+                      <InputText
+                        item={item}
+                        key={index}
+                        onChange={(e) => {
+                          handleText(e, patologias, setPatologias)
+                        }}
+                      />
+                    )
                   }
 
                   return (
-                    <>
-                      <InputCheckbox item={item} index={index} onChange={() => {}} />
-                    </>
+                    <InputCheckbox
+                      item={item}
+                      key={index}
+                      onChange={(e) => {
+                        handleCheckBox(e, patologias, setPatologias)
+                      }}
+                    />
                   )
                 })}
+              </div>
+
+              <div>
+                <h3 className="mt-4 w-[300px] border-b text-lg font-semibold">Notas</h3>
+                <div className="mt-3">
+                  <textarea
+                    className="h-24 w-full p-2"
+                    placeholder="Escribe aqui cualquier dato extra..."
+                    onChange={(e) => handleTextArea(e, setNotas)}
+                  ></textarea>
+                </div>
               </div>
             </div>
 
