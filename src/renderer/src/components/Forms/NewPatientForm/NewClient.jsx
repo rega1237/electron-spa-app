@@ -1,35 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { usePaciente } from '../../../store/store'
+import { useNavigate } from 'react-router-dom'
 
-const NewClient = ({ handleToggleModal, turso, setInfo }) => {
+const NewClient = ({ handleToggleModal }) => {
   const [nombre, setNombre] = useState('')
   const [cedula, setCedula] = useState('')
   const [telefono, setTelefono] = useState('')
+  const [birthdate, setBirthdate] = useState('')
+
+  const navigate = useNavigate()
+
+  const addPaciente = usePaciente((state) => state.addPaciente)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    try {
-      const pacientes = JSON.parse(localStorage.getItem('pacientes')) || []
-
-      const sqlAction = await turso.execute({
-        sql: 'INSERT INTO pacientes (nombre_completo, cedula, telefono) VALUES (:nombre_completo, :cedula,  :telefono)',
-        args: { nombre_completo: nombre, cedula: cedula, telefono: telefono }
-      })
-
-      const id = parseInt(sqlAction.lastInsertRowid.toString())
-
-      setInfo([...pacientes, { id: id, nombre_completo: nombre, cedula, telefono }])
-      localStorage.setItem(
-        'pacientes',
-        JSON.stringify([...pacientes, { id: id, nombre_completo: nombre, cedula, telefono }])
-      )
-
-      e.target.reset()
-      handleToggleModal()
-    } catch (error) {
-      console.error(error)
-      alert('Error al guardar el paciente')
-    }
+    await addPaciente({ nombre_completo: nombre, cedula, fecha_de_nacimiento: birthdate, telefono })
+    e.target.reset()
+    handleToggleModal()
+    const pacientes = JSON.parse(localStorage.getItem('pacientes'))
+    const id = pacientes[pacientes.length - 1].id
+    navigate(`/${id}`)
   }
 
   return (
@@ -61,6 +52,15 @@ const NewClient = ({ handleToggleModal, turso, setInfo }) => {
                   id="cedula"
                   className="input p-1"
                   onChange={(e) => setCedula(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="date">Fecha de nacimiento</label>
+                <input
+                  type="date"
+                  id="date"
+                  className="p-1"
+                  onChange={(e) => setBirthdate(e.target.value)}
                 />
               </div>
               <div className="flex flex-col gap-2">

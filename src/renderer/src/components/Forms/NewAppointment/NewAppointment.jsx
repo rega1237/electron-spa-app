@@ -1,9 +1,13 @@
 import { useState } from 'react'
+import { usePaciente, useCitas } from '../../../store/store'
 
-const Newappointment = ({ handleToggleModal, paciente, turso, setInfo }) => {
+const Newappointment = ({ handleToggleModal }) => {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [motivo, setMotivo] = useState('')
+
+  const paciente = usePaciente((state) => state.paciente)
+  const addCita = useCitas((state) => state.addCita)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -14,33 +18,12 @@ const Newappointment = ({ handleToggleModal, paciente, turso, setInfo }) => {
     }
 
     try {
-      const citas = JSON.parse(localStorage.getItem('citas'))
-      const paciente_id = paciente.id
-
-      const sqlAction = await turso.execute({
-        sql: 'INSERT INTO cita (paciente_id, fecha, hora, motivo) VALUES (:paciente_id, :fecha, :hora, :motivo)',
-        args: { paciente_id: paciente_id, fecha: date, hora: time, motivo: motivo }
-      })
-
-      const id = parseInt(sqlAction.lastInsertRowid.toString())
-
-      setInfo([
-        ...citas,
-        { id: id, paciente_id: paciente_id, fecha: date, hora: time, motivo: motivo }
-      ])
-      localStorage.setItem(
-        'citas',
-        JSON.stringify([
-          ...citas,
-          { id: id, paciente_id: paciente_id, fecha: date, hora: time, motivo: motivo }
-        ])
-      )
-
+      await addCita({ paciente_id: paciente.id, fecha: date, hora: time, motivo: motivo })
       e.target.reset()
       handleToggleModal()
     } catch (error) {
+      console.error(error.message)
       alert('Error al guardar la cita')
-      console.error(error)
     }
   }
 
