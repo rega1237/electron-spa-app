@@ -7,7 +7,8 @@ import TableBody from './components/Pacientes/TableBody'
 import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
 
-import { usePaciente, useCitas } from './store/store'
+import useCitas from './store/citasStore'
+import usePaciente from './store/pacienteStore'
 
 function App() {
   const [isModalNewPatientOpen, setIsModalNewPatientOpen] = useState(false)
