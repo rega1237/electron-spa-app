@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { usePaciente, useCitas } from '../../../store/store'
+import useCitas from '../../../store/citasStore'
+import usePaciente from '../../../store/pacienteStore'
 
 const Newappointment = ({ handleToggleModal }) => {
   const [date, setDate] = useState('')

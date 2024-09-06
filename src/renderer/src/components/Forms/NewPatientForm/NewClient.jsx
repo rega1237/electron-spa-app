@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { usePaciente } from '../../../store/store'
+import usePaciente from '../../../store/pacienteStore'
 import { useNavigate } from 'react-router-dom'
 
 const NewClient = ({ handleToggleModal }) => {

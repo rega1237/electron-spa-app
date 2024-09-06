@@ -1,5 +1,5 @@
 import TablePacienteRow from './TablePacienteRow'
-import { usePaciente } from '../../store/store'
+import usePaciente from '../../store/pacienteStore'
 
 const TableBody = ({ search, toggleNewAppointment, toggleNewHistory }) => {
   const pacientes = usePaciente((state) => state.pacientes)

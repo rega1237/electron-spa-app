@@ -1,4 +1,4 @@
-import { usePaciente } from '../../store/store'
+import usePaciente from '../../store/pacienteStore'
 
 const Input = ({ placeHolder, type, setSearch }) => {
   const pacientes = usePaciente((state) => state.pacientes)
