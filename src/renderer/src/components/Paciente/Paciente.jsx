@@ -1,8 +1,12 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+
+import HistoryCard from './History_card/HistoryCard'
+
 import useHistoriaFacial from '../../store/facialHistoryStore'
 import useCitas from '../../store/citasStore'
 import usePaciente from '../../store/pacienteStore'
+import useHistoriaCorporal from '../../store/bodyHistoryStore'
 
 const Paciente = () => {
   const { pacienteID } = useParams()
@@ -15,6 +19,8 @@ const Paciente = () => {
   const citasStore = useCitas((state) => state.citas)
   const historiaFacial = useHistoriaFacial((state) => state.historiaFacial)
   const getHistoriaFacial = useHistoriaFacial((state) => state.getHistoriaFacial)
+  const historiaCorporal = useHistoriaCorporal((state) => state.historiaCorporal)
+  const getHistoriaCorporal = useHistoriaCorporal((state) => state.getHistoriaCorporal)
 
   const getCita = (paciente) => {
     const citasPaciente = citasStore.filter((cita) => cita.paciente_id === paciente.id)
@@ -24,6 +30,7 @@ const Paciente = () => {
   const handlePaciente = async (paciente) => {
     await setPaciente(paciente)
     await getHistoriaFacial(paciente)
+    await getHistoriaCorporal(paciente)
     getCita(paciente)
   }
 
@@ -51,9 +58,13 @@ const Paciente = () => {
           </div>
 
           <div className="mt-5">
-            <h2 className="text-2xl font-bold">Historia Facial</h2>
-            <div className="mt-3">
-              <p>{historiaFacial.length > 0 ? 'Diabetes' : 'No hay historias'}</p>
+            <h2 className="text-2xl font-bold">Historias</h2>
+            <div className="flex gap-4 mt-3">
+              {Object.keys(historiaFacial).length > 0  && <HistoryCard type="Historia Facial" />}
+              {Object.keys(historiaCorporal).length > 0 && <HistoryCard type="Historia Corporal" />}
+              {Object.keys(historiaFacial).length === 0 && Object.keys(historiaCorporal).length === 0 && (
+                <p>No hay historias</p>
+              )}
             </div>
           </div>
 
@@ -61,6 +72,7 @@ const Paciente = () => {
             <h2 className="text-2xl font-bold">Citas</h2>
             <div className="mt-3">
               <ul>
+                {citas.length === 0 && <p>No hay citas</p>}
                 {citas.map((cita) => (
                   <li key={cita.id}>
                     <p>{cita.fecha}</p>
