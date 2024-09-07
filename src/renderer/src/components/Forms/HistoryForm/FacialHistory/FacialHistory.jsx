@@ -8,7 +8,7 @@ import {
   patologiasCutaneas
 } from '../../../../Constants/facialFormConstants'
 
-import { handleCheckBox, handleSelect, handleText, handleTextArea } from '../handleFunctions'
+import { handleCheckBox, handleSelect, handleText, handleTextArea, handleDate } from '../handleFunctions'
 
 import useHistoriaFacial from '../../../../store/facialHistoryStore'
 import usePaciente from '../../../../store/pacienteStore'
@@ -27,6 +27,7 @@ const FacialHistory = ({ handleToggleModal }) => {
   const [cuidadoDePiel, setCuidadoDePiel] = useState({ ...cuidadoPiel })
   const [patologias, setPatologias] = useState({ ...patologiasCutaneas })
   const [notas, setNotas] = useState('')
+  const date = handleDate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -82,7 +83,8 @@ const FacialHistory = ({ handleToggleModal }) => {
       patologias_tipo_acne: patologias['Tipo de acne'],
       patologias_grado_acne: patologias['Grado de acne'],
       patologias_causas_acne: patologias['Causas del acne'],
-      facial_notas: notas
+      facial_notas: notas,
+      fecha_historia: date
     }
 
     await addHistoriaFacial(SendData)

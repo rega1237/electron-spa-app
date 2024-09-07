@@ -12,7 +12,7 @@ import {
   antecedentesQuirurgicos
 } from '../../../../Constants/bodyFormConstants'
 
-import { handleCheckBox, handleText, handleTextArea } from '../handleFunctions'
+import { handleCheckBox, handleText, handleTextArea, handleDate } from '../handleFunctions'
 
 const BodyHistory = ({ handleToggleModal }) => {
   const paciente = usePaciente((state) => state.paciente)
@@ -23,6 +23,7 @@ const BodyHistory = ({ handleToggleModal }) => {
   const [antecedentesQuirurgicosForm, setAntecedentesQuirurgicos] =
     useState(antecedentesQuirurgicos)
   const [notas, setNotas] = useState('')
+  const date = handleDate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -48,7 +49,8 @@ const BodyHistory = ({ handleToggleModal }) => {
       motivo_otros: motivo.Otros,
       ant_quirur_implantes: antecedentesQuirurgicosForm.Implantes,
       ant_quirur_cirugia: antecedentesQuirurgicosForm.Cirugia,
-      corporal_notas: notas
+      corporal_notas: notas,
+      fecha_historia: date
     }
 
     await addHistoriaCorporal(sendData)
