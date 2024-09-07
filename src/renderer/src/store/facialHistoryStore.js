@@ -21,8 +21,14 @@ const useHistoriaFacial = create((set, get) => ({
         args: { paciente_id: pacienteID }
       })
 
-      set((state) => ({ historiaFacial: historiaFacial.rows }))
-      localStorage.setItem('historiaFacial', JSON.stringify(historiaFacial.rows))
+      if(historiaFacial.rows.length === 0) {
+        set({ historiaFacial: {} })
+        localStorage.setItem('historiaFacial', JSON.stringify({}))
+        return
+      }
+
+      set((state) => ({ historiaFacial: historiaFacial.rows[0] }))
+      localStorage.setItem('historiaFacial', JSON.stringify(historiaFacial.rows[0]))
     } catch (error) {
       console.error(error.message)
       alert('Error al obtener la historia facial')

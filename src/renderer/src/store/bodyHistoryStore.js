@@ -21,8 +21,14 @@ const useHistoriaCorporal = create((set, get) => ({
         args: { paciente_id: pacienteID }
       })
 
-      set({ historiaCorporal: historiaCorporal.rows })
-      localStorage.setItem('historiaCorporal', JSON.stringify(historiaCorporal.rows))
+      if(historiaCorporal.rows.length === 0) {
+        set({ historiaCorporal: {} })
+        localStorage.setItem('historiaCorporal', JSON.stringify({}))
+        return
+      }
+
+      set({ historiaCorporal: historiaCorporal.rows[0] })
+      localStorage.setItem('historiaCorporal', JSON.stringify(historiaCorporal.rows[0]))
     } catch (error) {
       console.error(error.message)
       alert('Error al obtener la historia corporal')
