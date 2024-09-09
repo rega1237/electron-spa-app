@@ -1,6 +1,9 @@
-import useHistoriaFacial from "../../../store/facialHistoryStore"
+import { Link } from 'react-router-dom'
+import useHistoriaFacial from '../../../store/facialHistoryStore'
+import usePaciente from '../../../store/pacienteStore'
 
-const HistoryCard = ({type}) => {
+const HistoryCard = ({ type }) => {
+  const paciente = usePaciente((state) => state.paciente)
   const historiaFacial = useHistoriaFacial((state) => state.historiaFacial)
 
   return (
@@ -15,7 +18,16 @@ const HistoryCard = ({type}) => {
         </div>
       </div>
       <div className="mt-4 flex gap-3 text-sm font-bold text-gray-500">
-        <button className="hover:text-primary">Abrir</button>
+        <Link
+          to={
+            type === 'Historia Facial'
+              ? `/paciente/${paciente.id}/historiaFacial`
+              : `/paciente/${paciente.id}/historiaCorporal`
+          }
+          className="hover:text-primary"
+        >
+          Abrir
+        </Link>
         <button className="hover:text-primary">Editar</button>
         <button className="hover:text-primary">Eliminar</button>
       </div>
