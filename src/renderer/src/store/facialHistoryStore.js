@@ -21,7 +21,7 @@ const useHistoriaFacial = create((set, get) => ({
         args: { paciente_id: pacienteID }
       })
 
-      if(historiaFacial.rows.length === 0) {
+      if (historiaFacial.rows.length === 0) {
         set({ historiaFacial: {} })
         localStorage.setItem('historiaFacial', JSON.stringify({}))
         return
