@@ -59,12 +59,11 @@ const Paciente = () => {
 
           <div className="mt-5">
             <h2 className="text-2xl font-bold">Historias</h2>
-            <div className="flex gap-4 mt-3">
-              {Object.keys(historiaFacial).length > 0  && <HistoryCard type="Historia Facial" />}
+            <div className="mt-3 flex gap-4">
+              {Object.keys(historiaFacial).length > 0 && <HistoryCard type="Historia Facial" />}
               {Object.keys(historiaCorporal).length > 0 && <HistoryCard type="Historia Corporal" />}
-              {Object.keys(historiaFacial).length === 0 && Object.keys(historiaCorporal).length === 0 && (
-                <p>No hay historias</p>
-              )}
+              {Object.keys(historiaFacial).length === 0 &&
+                Object.keys(historiaCorporal).length === 0 && <p>No hay historias</p>}
             </div>
           </div>
 

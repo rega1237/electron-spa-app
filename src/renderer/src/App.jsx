@@ -6,6 +6,8 @@ import Header from './components/Header/Header'
 import TableBody from './components/Pacientes/TableBody'
 import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
+import DisplayFacialHistory from './components/Display_Data/History_Facial/DisplayFacial'
+import DisplayCorporalHistory from './components/Display_Data/History_Body/DisplayCorporal'
 
 import useCitas from './store/citasStore'
 import usePaciente from './store/pacienteStore'
@@ -61,7 +63,12 @@ function App() {
                 />
               }
             />
-            <Route path="/:pacienteID" element={<Paciente />} />
+            <Route path="/paciente/:pacienteID" element={<Paciente />} />
+            <Route path="/paciente/:pacienteID/historiaFacial" element={<DisplayFacialHistory />} />
+            <Route
+              path="/paciente/:pacienteID/historiaCorporal"
+              element={<DisplayCorporalHistory />}
+            />
           </Routes>
         </div>
 
