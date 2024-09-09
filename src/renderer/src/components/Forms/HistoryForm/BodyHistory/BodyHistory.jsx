@@ -65,8 +65,8 @@ const BodyHistory = ({ handleToggleModal }) => {
         onSubmit={handleSubmit}
       >
         <div>
-          <h3 className="w-[200px] border-b text-lg font-semibold">Atecedentes Clinicos</h3>
-          <div className="mt-3 grid grid-cols-1 lg:grid-cols-2">
+          <h3 className="w-[200px] border-b text-lg font-semibold">Datos Estado de Salud</h3>
+          <div className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {Object.keys(alergias).map((item, index) => {
               return (
                 <InputText
@@ -76,12 +76,7 @@ const BodyHistory = ({ handleToggleModal }) => {
                 />
               )
             })}
-          </div>
-        </div>
 
-        <div>
-          <h3 className="mt-5 w-[200px] border-b text-lg font-semibold">Atecedentes Estéticos</h3>
-          <div className="mt-3 grid grid-cols-3 gap-4">
             {Object.keys(bodyClinicBackground).map((item, index) => {
               return (
                 <InputCheckbox
@@ -97,10 +92,10 @@ const BodyHistory = ({ handleToggleModal }) => {
         </div>
 
         <div>
-          <h3 className="mt-5 w-[200px] border-b text-lg font-semibold">Tipologia cutánea</h3>
+          <h3 className="mt-5 w-[200px] border-b text-lg font-semibold">Motivo de la consulta</h3>
           <div className="mt-3 grid grid-cols-2 items-center gap-2">
             {Object.keys(motivoConsulta).map((item, index) => {
-              if (item === 'Otro') {
+              if (item === 'Otros') {
                 return (
                   <InputText
                     item={item}
@@ -127,7 +122,7 @@ const BodyHistory = ({ handleToggleModal }) => {
 
         <div>
           <h3 className="mt-4 w-[300px] border-b text-lg font-semibold">
-            Cuídado habitual de la piel
+            Antecedentes Quirurgicos
           </h3>
           <div className="mt-3 grid grid-cols-2 gap-4">
             {Object.keys(antecedentesQuirurgicos).map((item, index) => {

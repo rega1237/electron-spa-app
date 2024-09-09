@@ -8,7 +8,13 @@ import {
   patologiasCutaneas
 } from '../../../../Constants/facialFormConstants'
 
-import { handleCheckBox, handleSelect, handleText, handleTextArea, handleDate } from '../handleFunctions'
+import {
+  handleCheckBox,
+  handleSelect,
+  handleText,
+  handleTextArea,
+  handleDate
+} from '../handleFunctions'
 
 import useHistoriaFacial from '../../../../store/facialHistoryStore'
 import usePaciente from '../../../../store/pacienteStore'
