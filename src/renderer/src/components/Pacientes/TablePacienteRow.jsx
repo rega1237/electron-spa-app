@@ -18,7 +18,7 @@ const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory }) 
   return (
     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
       <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-        <Link className="flex items-center gap-3" to={`/${paciente.id}`}>
+        <Link className="flex items-center gap-3" to={`/paciente/${paciente.id}`}>
           <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
             <img
               className="aspect-square h-full w-full"
