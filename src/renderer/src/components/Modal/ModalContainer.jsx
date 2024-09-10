@@ -1,9 +1,10 @@
 import { createPortal } from 'react-dom'
-import NewClient from '../Forms/NewClient'
-import Newappointment from '../Forms/NewAppointment'
+import NewClient from '../Forms/NewPatientForm/NewClient'
+import Newappointment from '../Forms/NewAppointment/NewAppointment'
 import NewHistory from '../Forms/HistoryForm/NewHistory'
+import Dialogue from '../UI/Dialogue/Dialogue'
 
-const ModalAccount = ({ formType, handleToggleModal, turso, setInfo, paciente }) => {
+const ModalAccount = ({ formType, handleToggleModal, newHistoryAction, type, deleteRecord }) => {
   const modalContainer = document.getElementById('modal')
 
   if (!modalContainer) {
@@ -11,28 +12,17 @@ const ModalAccount = ({ formType, handleToggleModal, turso, setInfo, paciente })
   }
 
   if (formType === 'newClient') {
-    return createPortal(
-      <NewClient handleToggleModal={handleToggleModal} turso={turso} setInfo={setInfo} />,
-      modalContainer
-    )
+    return createPortal(<NewClient handleToggleModal={handleToggleModal} />, modalContainer)
   } else if (formType === 'newAppointment') {
-    return createPortal(
-      <Newappointment
-        handleToggleModal={handleToggleModal}
-        turso={turso}
-        setInfo={setInfo}
-        paciente={paciente}
-      />,
-      modalContainer
-    )
+    return createPortal(<Newappointment handleToggleModal={handleToggleModal} />, modalContainer)
   } else if (formType === 'newHistory') {
     return createPortal(
-      <NewHistory
-        handleToggleModal={handleToggleModal}
-        turso={turso}
-        setInfo={setInfo}
-        paciente={paciente}
-      />,
+      <NewHistory handleToggleModal={handleToggleModal} newHistoryAction={newHistoryAction} />,
+      modalContainer
+    )
+  } else if (formType === 'dialogue') {
+    return createPortal(
+      <Dialogue handleToggleModal={handleToggleModal} type={type} deleteRecord={deleteRecord} />,
       modalContainer
     )
   }
