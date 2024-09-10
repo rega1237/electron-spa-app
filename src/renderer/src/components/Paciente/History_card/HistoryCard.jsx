@@ -30,7 +30,7 @@ const HistoryCard = ({ type, toggleNewHistory }) => {
         handleDialogueModal()
       }
     } catch (error) {
-      console.log(error.message)
+      console.error(error.message)
       alert('Error al eliminar la historia')
     }
   }

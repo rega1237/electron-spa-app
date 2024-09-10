@@ -15,15 +15,6 @@ const DisplayCorporalHistory = () => {
   const motivoCorporal = Object.values(historiaCorporal).slice(15, 20)
   const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 22)
 
-  useEffect(() => {
-    console.log('historiaCorporal', historiaCorporal)
-    console.log('values', Object.values(historiaCorporal))
-    console.log('alergias', alergiasCorporal)
-    console.log('antecedentes', antecedentes)
-    console.log('motivo', motivoCorporal)
-    console.log('quirur', antecedentesQuirurgicosCorporal)
-  }, [])
-
   return (
     <>
       <div className="no-scrollbar overflow-x-hidden overflow-y-scroll rounded-b-[10px] bg-primary p-5">
