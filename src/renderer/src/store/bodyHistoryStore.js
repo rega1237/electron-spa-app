@@ -62,6 +62,44 @@ const useHistoriaCorporal = create((set, get) => ({
       console.error(error.message)
       alert('Error al guardar la historia corporal')
     }
+  },
+  editHistoriaCorporal: async (data) => {
+    try {
+      const keys = Object.keys(data)
+        .filter((key) => key !== 'id' || key !== 'paciente_id' || key !== 'fecha_historia')
+        .map((key) => `${key} = :${key}`)
+        .join(', ')
+
+      const id = data.id
+
+      const sqlAction = await turso.execute({
+        sql: `UPDATE historia_corporal SET ${keys} WHERE id = ${id}`,
+        args: data
+      })
+
+      set((state) => ({ historiaCorporal: data }))
+
+      const getHistoryCorporal = get().historiaCorporal
+
+      localStorage.setItem('historiaCorporal', JSON.stringify(getHistoryCorporal))
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al editar la historia corporal')
+    }
+  },
+  deleteHistoriaCorporal: async (id) => {
+    try {
+      await turso.execute({
+        sql: 'DELETE FROM historia_corporal WHERE id = :id',
+        args: { id }
+      })
+
+      set((state) => ({ historiaCorporal: {} }))
+      localStorage.setItem('historiaCorporal', JSON.stringify({}))
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al eliminar la historia corporal')
+    }
   }
 }))
 
