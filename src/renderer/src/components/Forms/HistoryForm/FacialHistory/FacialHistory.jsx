@@ -61,7 +61,7 @@ const FacialHistory = ({ handleToggleModal, newHistoryAction }) => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
-  
+
       const SendData = {
         ...(newHistoryAction === 'edit' && { id: historiaFacial.id }),
         paciente_id: paciente.id,
@@ -117,16 +117,15 @@ const FacialHistory = ({ handleToggleModal, newHistoryAction }) => {
         facial_notas: notas,
         fecha_historia: date
       }
-  
+
       if (newHistoryAction === 'edit') {
         await editHistoriaFacial(SendData)
       } else {
         await addHistoriaFacial(SendData)
       }
-  
+
       handleToggleModal()
       navigate(`/paciente/${paciente.id}/historiaFacial`)
-      
     } catch (error) {
       console.error(error.message)
     }
