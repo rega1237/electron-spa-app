@@ -6,6 +6,7 @@ import {
   motivoConsulta,
   antecedentesQuirurgicos
 } from '../../../Constants/bodyFormConstants'
+import { useEffect } from 'react'
 
 const DisplayCorporalHistory = () => {
   const historiaCorporal = useHistoriaCorporal((state) => state.historiaCorporal)
@@ -13,6 +14,15 @@ const DisplayCorporalHistory = () => {
   const antecedentes = Object.values(historiaCorporal).slice(6, 15)
   const motivoCorporal = Object.values(historiaCorporal).slice(15, 20)
   const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 22)
+
+  useEffect(() => {
+    console.log('historiaCorporal', historiaCorporal)
+    console.log('values', Object.values(historiaCorporal))
+    console.log('alergias', alergiasCorporal)
+    console.log('antecedentes', antecedentes)
+    console.log('motivo', motivoCorporal)
+    console.log('quirur', antecedentesQuirurgicosCorporal)
+  }, [])
 
   return (
     <>
