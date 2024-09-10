@@ -71,7 +71,7 @@ const useHistoriaFacial = create((set, get) => ({
         .join(', ')
 
       const id = data.id
-   
+
       const sqlAction = await turso.execute({
         sql: `UPDATE historia_facial SET ${keys} WHERE id = ${id}`,
         args: data
