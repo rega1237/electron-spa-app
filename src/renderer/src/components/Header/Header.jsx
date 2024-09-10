@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import solIcon from '../../assets/images/sol-pro-salud.webp'
-import Input from '../UI/Input'
+import Input from '../UI/Inputs/Input'
 
 const Header = ({ handleToggleModal, setSearch }) => {
   const location = useLocation()
