@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import usePaciente from '../../../../store/pacienteStore'
 import useHistoriaCorporal from '../../../../store/bodyHistoryStore'
 
-import InputCheckbox from '../../../UI/InputCheckbox'
-import InputText from '../../../UI/InputText'
+import InputCheckbox from '../../../UI/Inputs/InputCheckbox'
+import InputText from '../../../UI/Inputs/InputText'
 
 import {
   alergias,
@@ -12,22 +13,48 @@ import {
   antecedentesQuirurgicos
 } from '../../../../Constants/bodyFormConstants'
 
-import { handleCheckBox, handleText, handleTextArea, handleDate } from '../handleFunctions'
+import {
+  handleCheckBox,
+  handleText,
+  handleTextArea,
+  handleDate,
+  setAllValuesCorporal as setAllValues
+} from '../handleFunctions'
 
-const BodyHistory = ({ handleToggleModal }) => {
-  const paciente = usePaciente((state) => state.paciente)
-  const addHistoriaCorporal = useHistoriaCorporal((state) => state.addHistoriaCorporal)
+const BodyHistory = ({ handleToggleModal, newHistoryAction }) => {
   const [alergiasForm, setAlergias] = useState(alergias)
   const [bodyClinic, setBodyClinic] = useState(bodyClinicBackground)
   const [motivo, setMotivo] = useState(motivoConsulta)
   const [antecedentesQuirurgicosForm, setAntecedentesQuirurgicos] =
     useState(antecedentesQuirurgicos)
   const [notas, setNotas] = useState('')
+
+  const paciente = usePaciente((state) => state.paciente)
+  const historiaCorporal = useHistoriaCorporal((state) => state.historiaCorporal)
+  const addHistoriaCorporal = useHistoriaCorporal((state) => state.addHistoriaCorporal)
+  const editHistoriaCorporal = useHistoriaCorporal((state) => state.editHistoriaCorporal)
+
   const date = handleDate()
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (newHistoryAction === 'edit') {
+      setAllValues(
+        historiaCorporal,
+        setAlergias,
+        setBodyClinic,
+        setMotivo,
+        setAntecedentesQuirurgicos,
+        setNotas
+      )
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const sendData = {
+      ...(newHistoryAction === 'edit' && { id: historiaCorporal.id }),
       paciente_id: paciente.id,
       alergias_medicamentos: alergiasForm.Medicamentos,
       alergias_cosmeticos: alergiasForm.Cosmeticos,
@@ -53,9 +80,14 @@ const BodyHistory = ({ handleToggleModal }) => {
       fecha_historia: date
     }
 
-    await addHistoriaCorporal(sendData)
+    if (newHistoryAction === 'edit') {
+      await editHistoriaCorporal(sendData)
+    } else {
+      await addHistoriaCorporal(sendData)
+    }
 
     handleToggleModal()
+    navigate(`/paciente/${paciente.id}/historiaCorporal`)
   }
 
   return (
@@ -69,11 +101,14 @@ const BodyHistory = ({ handleToggleModal }) => {
           <div className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {Object.keys(alergias).map((item, index) => {
               return (
-                <InputText
-                  item={item}
-                  key={index}
-                  onChange={(e) => handleText(e, alergiasForm, setAlergias)}
-                />
+                <>
+                  <InputText
+                    item={item}
+                    key={index}
+                    onChange={(e) => handleText(e, alergiasForm, setAlergias)}
+                    value={alergiasForm[item]}
+                  />
+                </>
               )
             })}
 
@@ -85,6 +120,7 @@ const BodyHistory = ({ handleToggleModal }) => {
                   onChange={(e) => {
                     handleCheckBox(e, bodyClinic, setBodyClinic)
                   }}
+                  value={bodyClinic[item]}
                 />
               )
             })}
@@ -103,6 +139,7 @@ const BodyHistory = ({ handleToggleModal }) => {
                     onChange={(e) => {
                       handleText(e, motivo, setMotivo)
                     }}
+                    value={motivo.Otros}
                   />
                 )
               }
@@ -114,6 +151,7 @@ const BodyHistory = ({ handleToggleModal }) => {
                   onChange={(e) => {
                     handleCheckBox(e, motivo, setMotivo)
                   }}
+                  value={motivo[item]}
                 />
               )
             })}
@@ -133,6 +171,7 @@ const BodyHistory = ({ handleToggleModal }) => {
                   onChange={(e) => {
                     handleText(e, antecedentesQuirurgicosForm, setAntecedentesQuirurgicos)
                   }}
+                  value={antecedentesQuirurgicosForm[item]}
                 />
               )
             })}
@@ -146,6 +185,7 @@ const BodyHistory = ({ handleToggleModal }) => {
               className="h-24 w-full p-2"
               placeholder="Escribe aqui cualquier dato extra..."
               onChange={(e) => handleTextArea(e, setNotas)}
+              value={notas}
             ></textarea>
           </div>
         </div>

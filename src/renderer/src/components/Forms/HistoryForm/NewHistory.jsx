@@ -4,7 +4,7 @@ import usePaciente from '../../../store/pacienteStore.js'
 import FacialHistory from './FacialHistory/FacialHistory'
 import BodyHistory from './BodyHistory/BodyHistory.jsx'
 
-const NewHistory = ({ handleToggleModal }) => {
+const NewHistory = ({ handleToggleModal, newHistoryAction }) => {
   const [facialForm, setFacialForm] = useState(true)
 
   const paciente = usePaciente((state) => state.paciente)
@@ -15,8 +15,11 @@ const NewHistory = ({ handleToggleModal }) => {
       <div className="absolute top-0 z-20 w-full">
         <div className="flex h-[100vh] flex-col items-center justify-center">
           <div className="flex w-[70%] items-center justify-between rounded-t-[10px] border-b bg-primary p-5 text-white">
-            <h2 className="text-lg font-semibold">Nueva Historia {paciente.nombre_completo}</h2>
-            <button className="text-muted-foreground" onClick={handleToggleModal}>
+            <h2 className="text-lg font-semibold">
+              {newHistoryAction === 'edit' ? 'Editar ' : 'Nueva '}Historia{' '}
+              {paciente.nombre_completo}
+            </h2>
+            <button className="text-muted-foreground" onClick={() => handleToggleModal('')}>
               Cerrar
             </button>
           </div>
@@ -39,9 +42,15 @@ const NewHistory = ({ handleToggleModal }) => {
             </button>
           </div>
           {facialForm ? (
-            <FacialHistory handleToggleModal={handleToggleModal} />
+            <FacialHistory
+              handleToggleModal={handleToggleModal}
+              newHistoryAction={newHistoryAction}
+            />
           ) : (
-            <BodyHistory handleToggleModal={handleToggleModal} />
+            <BodyHistory
+              handleToggleModal={handleToggleModal}
+              newHistoryAction={newHistoryAction}
+            />
           )}
         </div>
       </div>

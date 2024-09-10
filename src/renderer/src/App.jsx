@@ -16,6 +16,7 @@ function App() {
   const [isModalNewPatientOpen, setIsModalNewPatientOpen] = useState(false)
   const [isModalNewAppointmentOpen, setIsModalNewAppointmentOpen] = useState(false)
   const [isModalNewHistoryOpen, setIsModalNewHistoryOpen] = useState(false)
+  const [newHistoryAction, setNewHistoryAction] = useState('')
   const [search, setSearch] = useState('')
 
   const ipcHandle = () => window.electron.ipcRenderer.send('ping')
@@ -43,8 +44,13 @@ function App() {
     setIsModalNewAppointmentOpen(!isModalNewAppointmentOpen)
   }
 
-  const handleToggleNewHistoryModal = () => {
+  const handleToggleNewHistoryModal = (action) => {
     setIsModalNewHistoryOpen(!isModalNewHistoryOpen)
+    setNewHistoryAction(action)
+  }
+
+  const handleDialogueModal = (type) => {
+    setIsModalDialogueOpen([!isModalDialogueOpen])
   }
 
   return (
@@ -63,7 +69,15 @@ function App() {
                 />
               }
             />
-            <Route path="/paciente/:pacienteID" element={<Paciente />} />
+            <Route
+              path="/paciente/:pacienteID"
+              element={
+                <Paciente
+                  toggleNewHistory={handleToggleNewHistoryModal}
+                  newHistoryAction={newHistoryAction}
+                />
+              }
+            />
             <Route path="/paciente/:pacienteID/historiaFacial" element={<DisplayFacialHistory />} />
             <Route
               path="/paciente/:pacienteID/historiaCorporal"
@@ -84,7 +98,11 @@ function App() {
         )}
 
         {isModalNewHistoryOpen && (
-          <ModalAccount formType="newHistory" handleToggleModal={handleToggleNewHistoryModal} />
+          <ModalAccount
+            formType="newHistory"
+            newHistoryAction={newHistoryAction}
+            handleToggleModal={handleToggleNewHistoryModal}
+          />
         )}
       </Router>
     </>

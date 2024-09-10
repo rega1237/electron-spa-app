@@ -11,7 +11,7 @@ const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory }) 
   }
 
   const openHistoryModal = () => {
-    toggleNewHistory()
+    toggleNewHistory('new')
     setPaciente(paciente)
   }
 
