@@ -6,11 +6,9 @@ import useCitas from '../../store/citasStore'
 const Home = ({ search, toggleNewAppointment, toggleNewHistory }) => {
   const [patientsTable, setPatientsTable] = useState(true)
 
-  const citas = useCitas((state) => state.citas)
-
   return (
     <>
-      <div className="mx-auto mb-5 flex w-[300px] justify-center gap-4">
+      <div className="mx-auto mb-5 flex justify-center gap-4">
         <button
           className={patientsTable ? 'border-b-2 p-3' : ''}
           onClick={() => setPatientsTable(true)}
