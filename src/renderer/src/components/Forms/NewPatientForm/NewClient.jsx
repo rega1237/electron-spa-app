@@ -20,7 +20,7 @@ const NewClient = ({ handleToggleModal }) => {
     handleToggleModal()
     const pacientes = JSON.parse(localStorage.getItem('pacientes'))
     const id = pacientes[pacientes.length - 1].id
-    navigate(`/${id}`)
+    navigate(`/paciente/${id}`)
   }
 
   return (
