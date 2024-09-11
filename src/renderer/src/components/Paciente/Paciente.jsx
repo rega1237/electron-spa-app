@@ -38,7 +38,7 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   useEffect(() => {
     const searchPaciente = pacientes.find((paciente) => paciente.id === parseInt(pacienteID))
     handlePaciente(searchPaciente)
-  }, [pacienteID])
+  }, [pacienteID, citasStore])
 
   return (
     <>
