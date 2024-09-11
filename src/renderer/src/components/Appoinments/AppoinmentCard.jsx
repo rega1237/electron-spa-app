@@ -1,15 +1,35 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+
+import ModalAccount from '../Modal/ModalContainer'
+
 import usePaciente from '../../store/pacienteStore'
 import useCitas from '../../store/citasStore'
 
 const AppoinmentCard = ({ cita }) => {
+  const [isModalOpenAppoinment, setIsModalOpenAppoiment] = useState(false)
+
   const pacientes = usePaciente((state) => state.pacientes)
+  const deleteCita = useCitas((state) => state.deleteCita)
 
   const paciente = pacientes.find((paciente) => paciente.id === cita.paciente_id)
   const fecha = cita.fecha
   const hora = cita.hora
   const motivo = cita.motivo
+
+  const handleDialogueModal = () => {
+    setIsModalOpenAppoiment(!isModalOpenAppoinment)
+  }
+
+  const handleDelete = () => {
+    try {
+      deleteCita(cita.id)
+      handleDialogueModal()
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al eliminar la cita')
+    }
+  }
 
   return (
     <>
@@ -34,11 +54,19 @@ const AppoinmentCard = ({ cita }) => {
           </div>
         </div>
         <div className="mt-4 flex gap-3 text-sm font-bold text-gray-500">
-          <button className="hover:text-primary" onClick={() => console.log('hola')}>
+          <button className="hover:text-primary" onClick={handleDialogueModal}>
             Eliminar
           </button>
         </div>
       </div>
+      {isModalOpenAppoinment && (
+        <ModalAccount
+          formType="dialogue"
+          handleToggleModal={handleDialogueModal}
+          type="cita"
+          deleteRecord={handleDelete}
+        />
+      )}
     </>
   )
 }
