@@ -44,6 +44,25 @@ const useCitas = create((set, get) => ({
       console.error(error.message)
       alert('Error al guardar la cita')
     }
+  },
+  deleteCita: async (id) => {
+    try {
+      await turso.execute({
+        sql: 'DELETE FROM citas WHERE id = :id',
+        args: { id: id }
+      })
+
+      set((state) => ({
+        citas: state.citas.filter((cita) => cita.id !== id)
+      }))
+
+      const getCitas = get().citas
+
+      localStorage.setItem('citas', JSON.stringify(getCitas))
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al eliminar la cita')
+    }
   }
 }))
 
