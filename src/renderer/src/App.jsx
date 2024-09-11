@@ -3,7 +3,7 @@ import { createClient } from '@libsql/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Header from './components/Header/Header'
-import TableBody from './components/Pacientes/TableBody'
+import Home from './components/Home/Home'
 import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
 import DisplayFacialHistory from './components/Display_Data/History_Facial/DisplayFacial'
@@ -62,7 +62,7 @@ function App() {
             <Route
               path="/"
               element={
-                <TableBody
+                <Home
                   search={search}
                   toggleNewAppointment={handleToggleNewAppointmentModal}
                   toggleNewHistory={handleToggleNewHistoryModal}
