@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
   facialHistoryClinicBackground,
   facialHistoryAestheticBackground,
@@ -5,9 +6,12 @@ import {
   cuidadoPiel,
   patologiasCutaneas
 } from '../../../Constants/facialFormConstants'
+
 import useHistoriaFacial from '../../../store/facialHistoryStore'
+import usePaciente from '../../../store/pacienteStore'
 
 const DisplayFacialHistory = () => {
+  const paciente = usePaciente((state) => state.paciente)
   const historiaFacial = useHistoriaFacial((state) => state.historiaFacial)
   const clinicFacial = Object.values(historiaFacial).slice(2, 9)
   const esteticaFacial = Object.values(historiaFacial).slice(9, 18)
@@ -18,6 +22,26 @@ const DisplayFacialHistory = () => {
   return (
     <>
       <div className="no-scrollbar overflow-x-hidden overflow-y-scroll rounded-b-[10px] bg-primary p-5">
+        <Link to={`/paciente/${paciente.id}`}>
+          <button type="button" class="px-3 py-2 text-primary-foreground hover:text-primary">
+            <div class="flex flex-row align-middle">
+              <svg
+                class="mr-2 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <p class="ml-2">Atras</p>
+            </div>
+          </button>
+        </Link>
+
         <h3 className="my-5 border-b text-center text-lg font-semibold">
           HISTORIA TRATAMIENTO CORPORALES
         </h3>
