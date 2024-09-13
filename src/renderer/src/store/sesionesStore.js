@@ -4,6 +4,7 @@ import turso from './turso'
 export const useSesion = create((set, get) => ({
   sesionFacial: [],
   sesionCorporal: [],
+  sesiones: [],
   getSesionFacial: async (paciente) => {
     try {
       const storedSesionFacial = JSON.parse(localStorage.getItem('sesionFacial'))
@@ -88,6 +89,17 @@ export const useSesion = create((set, get) => ({
       return false
     }
   },
+  getSesiones: async () => {
+    const sesionFacial = await get().sesionFacial
+    const sesionCorporal = await get().sesionCorporal
+    const sesionesOrdenada = [...sesionCorporal, ...sesionFacial].sort((a, b) => {
+      return new Date(b.fecha) - new Date(a.fecha)
+    })
+
+    set({ sesiones: sesionesOrdenada })
+
+    localStorage.setItem('sesiones', JSON.stringify(sesionesOrdenada))
+  },
   addSesionCorporal: async (data) => {
     try {
       const keys = Object.keys(data).join(', ')
@@ -114,6 +126,46 @@ export const useSesion = create((set, get) => ({
     } catch (error) {
       console.error(error.message)
       alert('Error al guardar la sesion corporal')
+      return false
+    }
+  },
+  deleteSesionFacial: async (id) => {
+    try {
+      await turso.execute({
+        sql: 'DELETE FROM sesion_facial WHERE id = :id',
+        args: { id: id }
+      })
+
+      const sesionFacial = get().sesionFacial.filter((sesion) => sesion.id !== id)
+
+      set({ sesionFacial: sesionFacial })
+
+      localStorage.setItem('sesionFacial', JSON.stringify(sesionFacial))
+
+      return true
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al eliminar la sesion facial')
+      return false
+    }
+  },
+  deleteSesionCorporal: async (id) => {
+    try {
+      await turso.execute({
+        sql: 'DELETE FROM sesion_corporal WHERE id = :id',
+        args: { id: id }
+      })
+
+      const sesionCorporal = get().sesionCorporal.filter((sesion) => sesion.id !== id)
+
+      set({ sesionCorporal: sesionCorporal })
+
+      localStorage.setItem('sesionCorporal', JSON.stringify(sesionCorporal))
+
+      return true
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al eliminar la sesion corporal')
       return false
     }
   }
