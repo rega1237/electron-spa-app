@@ -2,7 +2,6 @@ import DisplaySesionCorporal from './DisplaySesionCorporal/DisplaySesionCorporal
 import DisplaySesionFacial from './DisplaySesionFacial/DisplaySesionFacial'
 
 const DisplaySesionBody = ({ sesion, handleToggleModal }) => {
-  console.log(sesion)
   return (
     <>
       <div className="absolute top-0 z-10 min-h-full w-full bg-primary-foreground opacity-15"></div>
