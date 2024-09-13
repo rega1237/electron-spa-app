@@ -28,10 +28,12 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   const getHistoriaFacial = useHistoriaFacial((state) => state.getHistoriaFacial)
   const historiaCorporal = useHistoriaCorporal((state) => state.historiaCorporal)
   const getHistoriaCorporal = useHistoriaCorporal((state) => state.getHistoriaCorporal)
-  const sesionesFacial = useSesion((state) => state.sesionFacial)
-  const sesionesCorporal = useSesion((state) => state.sesionCorporal)
+  const sesionFacial = useSesion((state) => state.sesionFacial)
+  const sesionCorporal = useSesion((state) => state.sesionCorporal)
+  const sesionesStore = useSesion((state) => state.sesiones)
   const getSesionFacial = useSesion((state) => state.getSesionFacial)
   const getSesionCorpotal = useSesion((state) => state.getSesionCorporal)
+  const getSesiones = useSesion((state) => state.getSesiones)
 
   const getCita = (paciente) => {
     const citasPaciente = citasStore.filter((cita) => cita.paciente_id === paciente.id)
@@ -44,6 +46,7 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
     await getHistoriaCorporal(paciente)
     await getSesionFacial(paciente)
     await getSesionCorpotal(paciente)
+    await getSesiones()
     getCita(paciente)
   }
 
@@ -68,7 +71,7 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   useEffect(() => {
     const searchPaciente = pacientes.find((paciente) => paciente.id === parseInt(pacienteID))
     handlePaciente(searchPaciente)
-  }, [pacienteID, citasStore])
+  }, [pacienteID, citasStore, sesionCorporal, sesionFacial])
 
   return (
     <>
@@ -170,19 +173,10 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
               <div className="mt-5">
                 <h2 className="text-2xl font-bold">Sesiones</h2>
                 <div className="mt-3 grid grid-cols-3 gap-4">
-                  {sesionesFacial.length > 0 &&
-                    sesionesFacial.map((sesion) => (
-                      <SesionesCard key={sesion.id} sesion={sesion} />
-                    ))}
-
-                  {sesionesCorporal.length > 0 &&
-                    sesionesCorporal.map((sesion) => (
-                      <SesionesCard key={sesion.id} sesion={sesion} />
-                    ))}
-
-                  {sesionesFacial.length === 0 && sesionesCorporal.length === 0 && (
-                    <p>No hay sesiones</p>
-                  )}
+                  {sesionesStore.length === 0 && <p>No hay sesiones</p>}
+                  {sesionesStore.map((sesion) => (
+                    <SesionesCard key={sesion.id} sesion={sesion} />
+                  ))}
                 </div>
               </div>
             )}
