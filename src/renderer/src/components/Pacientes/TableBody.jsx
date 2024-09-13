@@ -1,7 +1,13 @@
 import TablePacienteRow from './TablePacienteRow'
 import usePaciente from '../../store/pacienteStore'
 
-const TableBody = ({ search, toggleNewAppointment, toggleNewHistory, newHistoryAction }) => {
+const TableBody = ({
+  search,
+  toggleNewAppointment,
+  toggleNewHistory,
+  newHistoryAction,
+  toggleNewSession
+}) => {
   const pacientes = usePaciente((state) => state.pacientes)
 
   return (
@@ -38,6 +44,7 @@ const TableBody = ({ search, toggleNewAppointment, toggleNewHistory, newHistoryA
                     toggleNewAppointment={toggleNewAppointment}
                     toggleNewHistory={toggleNewHistory}
                     newHistoryAction={newHistoryAction}
+                    toggleNewSession={toggleNewSession}
                   />
                 ))}
           </tbody>

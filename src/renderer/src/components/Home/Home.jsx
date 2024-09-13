@@ -3,7 +3,7 @@ import TableBody from '../Pacientes/TableBody'
 import Appoinments from '../Appoinments/Appoinments'
 import useCitas from '../../store/citasStore'
 
-const Home = ({ search, toggleNewAppointment, toggleNewHistory }) => {
+const Home = ({ search, toggleNewAppointment, toggleNewHistory, toggleNewSession }) => {
   const [patientsTable, setPatientsTable] = useState(true)
 
   return (
@@ -28,6 +28,7 @@ const Home = ({ search, toggleNewAppointment, toggleNewHistory }) => {
           search={search}
           toggleNewHistory={toggleNewHistory}
           toggleNewAppointment={toggleNewAppointment}
+          toggleNewSession={toggleNewSession}
         />
       ) : (
         <Appoinments />
