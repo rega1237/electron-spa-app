@@ -5,7 +5,8 @@ import usePaciente from '../../store/pacienteStore'
 import ModalAccount from '../Modal/ModalContainer'
 
 const SesionesCard = ({ sesion }) => {
-  const paciente = usePaciente((state) => state.paciente)
+  const deleteSesionFacial = useSesion((state) => state.deleteSesionFacial)
+  const deleteSesionCorporal = useSesion((state) => state.deleteSesionCorporal)
 
   const [isModalDialogueOpen, setIsModalDialogueOpen] = useState(false)
   const [displaySesion, setDisplaySesion] = useState(false)
@@ -16,6 +17,19 @@ const SesionesCard = ({ sesion }) => {
 
   const handleDisplaySession = () => {
     setDisplaySesion(!displaySesion)
+  }
+
+  const deleteSesion = (sesion) => {
+    const id = sesion.id
+    const sesionType = sesion.sesion
+
+    if (sesionType === 'Facial') {
+      deleteSesionFacial(id)
+    } else {
+      deleteSesionCorporal(id)
+    }
+
+    handleDialogueModal()
   }
 
   return (
@@ -37,7 +51,7 @@ const SesionesCard = ({ sesion }) => {
           <button className="hover:text-primary" onClick={() => console.log('hola')}>
             Editar
           </button>
-          <button className="hover:text-primary" onClick={() => console.log('hola')}>
+          <button className="hover:text-primary" onClick={handleDialogueModal}>
             Eliminar
           </button>
         </div>
@@ -46,8 +60,8 @@ const SesionesCard = ({ sesion }) => {
         <ModalAccount
           formType="dialogue"
           handleToggleModal={handleDialogueModal}
-          type={type}
-          deleteRecord={deleteHistory}
+          type={sesion}
+          deleteRecord={deleteSesion}
         />
       )}
       {displaySesion && (
