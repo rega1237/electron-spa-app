@@ -10,15 +10,18 @@ import useCitas from '../../store/citasStore'
 import usePaciente from '../../store/pacienteStore'
 import useHistoriaCorporal from '../../store/bodyHistoryStore'
 import useSesion from '../../store/sesionesStore'
+import ModalAccount from '../Modal/ModalContainer'
 
 const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   const { pacienteID } = useParams()
   const navigate = useNavigate()
 
   const [citas, setCitas] = useState([])
+  const [editPaciente, setEditPaciente] = useState(false)
   const [displayHistory, setDisplayHistory] = useState(true)
   const [displayAppoinments, setDisplayAppoinments] = useState(false)
   const [displaySesiones, setDisplaySesiones] = useState(false)
+  const [displayDialogue, setDisplayDialogue] = useState(false)
 
   const pacientes = usePaciente((state) => state.pacientes)
   const paciente = usePaciente((state) => state.paciente)
@@ -37,7 +40,7 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
     setCitas(citasPaciente)
   }
 
-  const handleDeletePaciente = async () => {
+  const handleDeletePaciente = async (paciente) => {
     await deletePaciente(paciente.id)
     navigate('/')
   }
@@ -68,6 +71,14 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
     setDisplaySesiones(true)
   }
 
+  const handleToggleDialogue = () => {
+    setDisplayDialogue(!displayDialogue)
+  }
+
+  const handleToggleEditPatient = () => {
+    setEditPaciente(!editPaciente)
+  }
+
   useEffect(() => {
     const searchPaciente = pacientes.find((paciente) => paciente.id === parseInt(pacienteID))
     handlePaciente(searchPaciente)
@@ -77,7 +88,6 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
     const updateSessions = async () => {
       await getSesiones(paciente)
     }
-
     updateSessions()
   }, [sesionesStore.length])
 
@@ -112,12 +122,15 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
               <p>{paciente.telefono}</p>
             </div>
             <div className="mt-3 flex gap-5">
-              <button className="bg-secondary px-5 py-1 text-primary-foreground hover:bg-secondary-foreground hover:text-primary">
+              <button
+                className="bg-secondary px-5 py-1 text-primary-foreground hover:bg-secondary-foreground hover:text-primary"
+                onClick={handleToggleEditPatient}
+              >
                 Editar
               </button>
               <button
                 className="bg-secondary px-5 py-1 text-primary-foreground hover:bg-secondary-foreground hover:text-primary"
-                onClick={handleDeletePaciente}
+                onClick={handleToggleDialogue}
               >
                 Eliminar
               </button>
@@ -194,6 +207,19 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
           </>
         )}
       </div>
+
+      {displayDialogue && (
+        <ModalAccount
+          handleToggleModal={handleToggleDialogue}
+          formType="dialogue"
+          deleteRecord={handleDeletePaciente}
+          type={paciente}
+        />
+      )}
+
+      {editPaciente && (
+        <ModalAccount formType="newClient" handleToggleModal={handleToggleEditPatient} newHistoryAction={'edit'} type={paciente} />
+      )}
     </>
   )
 }
