@@ -44,7 +44,7 @@ const Newappointment = ({ handleToggleModal }) => {
       <div className="absolute top-0 z-10 min-h-full w-full bg-primary-foreground opacity-15"></div>
       <div className="absolute top-0 z-20 w-full">
         <div className="flex h-[100vh] flex-col items-center justify-center">
-          <div className="flex items-center justify-between rounded-t-[10px] border-b bg-primary p-5 text-white">
+          <div className="flex w-[30%] items-center justify-between rounded-t-[10px] border-b bg-primary p-5 text-white">
             <h2 className="text-lg font-semibold">Nuevo Cita para {paciente.nombre_completo}</h2>
             <button className="text-muted-foreground" onClick={handleToggleModal}>
               Cerrar
@@ -60,6 +60,7 @@ const Newappointment = ({ handleToggleModal }) => {
                   id="date"
                   className="p-1"
                   onChange={(e) => setDate(e.target.value)}
+                  required
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -69,6 +70,7 @@ const Newappointment = ({ handleToggleModal }) => {
                   id="time"
                   className="input p-1"
                   onChange={(e) => setTime(e.target.value)}
+                  required
                 >
                   <option value="">Seleccione una hora</option>
                   {timeAr.map((t) => (
@@ -85,6 +87,7 @@ const Newappointment = ({ handleToggleModal }) => {
                   id="motivo"
                   className="input p-1"
                   onChange={(e) => setMotivo(e.target.value)}
+                  required
                 >
                   <option value="">Seleccione un motivo</option>
                   <option value="Tratamiento Facial">Tratamiento Facial</option>
