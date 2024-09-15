@@ -2,8 +2,8 @@ import logo from '../../../assets/images/logo.webp'
 
 const Loading = () => {
   return (
-    <div class="flex flex-col h-[100vh] w-full items-center justify-center">
-      <img className='w-[200px]' src={logo} alt="logo pro salud spa" />
+    <div class="flex h-[100vh] w-full flex-col items-center justify-center">
+      <img className="w-[200px]" src={logo} alt="logo pro salud spa" />
       <div class="flex items-center justify-center space-x-1 text-sm text-gray-700">
         <svg
           fill="none"
