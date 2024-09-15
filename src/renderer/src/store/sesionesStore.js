@@ -3,15 +3,13 @@ import turso from './turso'
 
 export const useSesion = create((set, get) => ({
   sesiones: [],
-  getSesiones: async (paciente) => {
-    const pacienteID = paciente.id
-
+  getSesiones: async (id) => {
     const sesionFacial = await turso.execute(
-      `SELECT * FROM sesion_facial WHERE paciente_id = ${pacienteID}`
+      `SELECT * FROM sesion_facial WHERE paciente_id = ${id}`
     )
 
     const sesionCorporal = await turso.execute(
-      `SELECT * FROM sesion_corporal WHERE paciente_id = ${pacienteID}`
+      `SELECT * FROM sesion_corporal WHERE paciente_id = ${id}`
     )
 
     const sesionesOrdenada = [...sesionCorporal.rows, ...sesionFacial.rows].sort((a, b) => {
