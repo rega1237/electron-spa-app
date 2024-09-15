@@ -5,6 +5,7 @@ import NewHistory from '../Forms/HistoryForm/NewHistory'
 import Dialogue from '../UI/Dialogue/Dialogue'
 import NewSessions from '../Forms/Sessions/NewSessions'
 import DisplaySesionBody from '../Sesiones/DisplaySesion/DisplaySesionBody'
+import EditSessions from '../Forms/Sessions/EditSessions'
 
 const ModalAccount = ({ formType, handleToggleModal, newHistoryAction, type, deleteRecord }) => {
   const modalContainer = document.getElementById('modal')
@@ -29,6 +30,11 @@ const ModalAccount = ({ formType, handleToggleModal, newHistoryAction, type, del
     )
   } else if (formType === 'newSession') {
     return createPortal(<NewSessions handleToggleModal={handleToggleModal} />, modalContainer)
+  } else if (formType === 'editSession') {
+    return createPortal(
+      <EditSessions handleToggleModal={handleToggleModal} sesion={type} />,
+      modalContainer
+    )
   } else if (formType === 'displaySession') {
     return createPortal(
       <DisplaySesionBody sesion={type} handleToggleModal={handleToggleModal} />,
