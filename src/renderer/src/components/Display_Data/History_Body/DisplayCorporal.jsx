@@ -22,10 +22,10 @@ const DisplayCorporalHistory = () => {
     <>
       <div className="no-scrollbar overflow-x-hidden overflow-y-scroll rounded-b-[10px] bg-primary p-5">
         <Link to={`/paciente/${paciente.id}`}>
-          <button type="button" class="px-3 py-2 text-primary-foreground hover:text-primary">
-            <div class="flex flex-row align-middle">
+          <button type="button" className="px-3 py-2 text-primary-foreground hover:text-primary">
+            <div className="flex flex-row align-middle">
               <svg
-                class="mr-2 w-5"
+                className="mr-2 w-5"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@ const DisplayCorporalHistory = () => {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              <p class="ml-2">Atras</p>
+              <p className="ml-2">Atras</p>
             </div>
           </button>
         </Link>
