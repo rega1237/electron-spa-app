@@ -1,6 +1,7 @@
 export const medidas = {
   Peso: '',
   Cintura: '',
+  Busto: '',
   Cadera: '',
   Abdomen: '',
   'Brazo derecho': '',
