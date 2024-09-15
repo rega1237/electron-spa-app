@@ -50,8 +50,8 @@ const useHistoriaFacial = create((set, get) => ({
 
       set((state) => ({
         historiaFacial: {
-          ...data,
-          id: id
+          id: id,
+          ...data
         }
       }))
 

@@ -2,25 +2,53 @@ import { useEffect, useState } from 'react'
 import usePaciente from '../../../store/pacienteStore'
 import { useNavigate } from 'react-router-dom'
 
-const NewClient = ({ handleToggleModal }) => {
+const NewClient = ({ handleToggleModal, newHistoryAction, type }) => {
   const [nombre, setNombre] = useState('')
   const [cedula, setCedula] = useState('')
   const [telefono, setTelefono] = useState('')
   const [birthdate, setBirthdate] = useState('')
 
+  let sqlPaciente
+
   const navigate = useNavigate()
 
   const addPaciente = usePaciente((state) => state.addPaciente)
+  const editPaciente = usePaciente((state) => state.editPaciente)
+
+  useEffect(() => {
+    if (newHistoryAction === 'edit') {
+      setNombre(type.nombre_completo)
+      setCedula(type.cedula)
+      setTelefono(type.telefono)
+      setBirthdate(type.fecha_de_nacimiento)
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (newHistoryAction === 'edit') {
+      sqlPaciente = await editPaciente({
+        id: type.id,
+        nombre_completo: nombre,
+        cedula,
+        fecha_de_nacimiento: birthdate,
+        telefono
+      })
+    } else {
+      sqlPaciente = await addPaciente({
+        nombre_completo: nombre,
+        cedula,
+        fecha_de_nacimiento: birthdate,
+        telefono
+      })
+    }
 
-    await addPaciente({ nombre_completo: nombre, cedula, fecha_de_nacimiento: birthdate, telefono })
-    e.target.reset()
-    handleToggleModal()
-    const pacientes = JSON.parse(localStorage.getItem('pacientes'))
-    const id = pacientes[pacientes.length - 1].id
-    navigate(`/paciente/${id}`)
+    if (sqlPaciente) {
+      handleToggleModal()
+      const pacientes = JSON.parse(localStorage.getItem('pacientes'))
+      const id = newHistoryAction === 'edit' ? type.id : pacientes[pacientes.length - 1].id
+      navigate(`/paciente/${id}`)
+    }
   }
 
   return (
@@ -43,6 +71,7 @@ const NewClient = ({ handleToggleModal }) => {
                   id="name"
                   className="p-1"
                   onChange={(e) => setNombre(e.target.value)}
+                  value={nombre}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -52,6 +81,7 @@ const NewClient = ({ handleToggleModal }) => {
                   id="cedula"
                   className="input p-1"
                   onChange={(e) => setCedula(e.target.value)}
+                  value={cedula}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -61,6 +91,7 @@ const NewClient = ({ handleToggleModal }) => {
                   id="date"
                   className="p-1"
                   onChange={(e) => setBirthdate(e.target.value)}
+                  value={birthdate}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -70,6 +101,7 @@ const NewClient = ({ handleToggleModal }) => {
                   id="phone"
                   className="input p-1"
                   onChange={(e) => setTelefono(e.target.value)}
+                  value={telefono}
                 />
               </div>
 

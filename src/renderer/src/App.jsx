@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { createClient } from '@libsql/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Header from './components/Header/Header'
@@ -16,19 +15,11 @@ function App() {
   const [isModalNewPatientOpen, setIsModalNewPatientOpen] = useState(false)
   const [isModalNewAppointmentOpen, setIsModalNewAppointmentOpen] = useState(false)
   const [isModalNewHistoryOpen, setIsModalNewHistoryOpen] = useState(false)
+  const [isModalSessionOpen, setIsModalSessionOpen] = useState(false)
   const [newHistoryAction, setNewHistoryAction] = useState('')
   const [search, setSearch] = useState('')
 
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-
-  const turso = createClient({
-    url: import.meta.env.VITE_URL,
-    authToken: import.meta.env.VITE_API_KEY
-  })
-
-  const pacientes = usePaciente((state) => state.pacientes)
   const getPacientes = usePaciente((state) => state.getPacientes)
-  const paciente = usePaciente((state) => state.paciente)
   const getCitas = useCitas((state) => state.getCitas)
 
   useEffect(() => {
@@ -49,8 +40,8 @@ function App() {
     setNewHistoryAction(action)
   }
 
-  const handleDialogueModal = (type) => {
-    setIsModalDialogueOpen([!isModalDialogueOpen])
+  const handleToggleNewSessionModal = () => {
+    setIsModalSessionOpen(!isModalSessionOpen)
   }
 
   return (
@@ -66,6 +57,7 @@ function App() {
                   search={search}
                   toggleNewAppointment={handleToggleNewAppointmentModal}
                   toggleNewHistory={handleToggleNewHistoryModal}
+                  toggleNewSession={handleToggleNewSessionModal}
                 />
               }
             />
@@ -103,6 +95,10 @@ function App() {
             newHistoryAction={newHistoryAction}
             handleToggleModal={handleToggleNewHistoryModal}
           />
+        )}
+
+        {isModalSessionOpen && (
+          <ModalAccount formType="newSession" handleToggleModal={handleToggleNewSessionModal} />
         )}
       </Router>
     </>

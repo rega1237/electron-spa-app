@@ -1,5 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import fs from 'fs'
+import path from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
@@ -51,6 +53,21 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.on('save-images', (event, images, username, date, cedula, tipoSesion) => {
+    const desktopPath = app.getPath('desktop')
+    const sessionFolder = path.join(desktopPath, 'sesiones', `${username}_${cedula}`)
+    const dateFolder = path.join(sessionFolder, `sesion_${tipoSesion}_${date}`)
+
+    // Crear carpetas si no existen
+    fs.mkdirSync(sessionFolder, { recursive: true })
+    fs.mkdirSync(dateFolder, { recursive: true })
+
+    images.forEach((image) => {
+      const imagePath = path.join(dateFolder, path.basename(image))
+      fs.copyFileSync(image, imagePath)
+    })
+  })
 
   createWindow()
 

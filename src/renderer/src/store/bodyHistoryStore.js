@@ -50,8 +50,8 @@ const useHistoriaCorporal = create((set, get) => ({
 
       set((state) => ({
         historiaCorporal: {
-          ...data,
-          id: id
+          id: id,
+          ...data
         }
       }))
 

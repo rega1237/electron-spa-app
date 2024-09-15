@@ -2,7 +2,12 @@ import { Link } from 'react-router-dom'
 import patientPlaceholder from '../../assets/images/placeholder-user.webp'
 import usePaciente from '../../store/pacienteStore'
 
-const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory }) => {
+const TablePacienteRow = ({
+  paciente,
+  toggleNewAppointment,
+  toggleNewHistory,
+  toggleNewSession
+}) => {
   const setPaciente = usePaciente((state) => state.setPaciente)
 
   const openAppointmentModal = () => {
@@ -12,6 +17,11 @@ const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory }) 
 
   const openHistoryModal = () => {
     toggleNewHistory('new')
+    setPaciente(paciente)
+  }
+
+  const openSessionModal = () => {
+    toggleNewSession()
     setPaciente(paciente)
   }
 
@@ -51,7 +61,10 @@ const TablePacienteRow = ({ paciente, toggleNewAppointment, toggleNewHistory }) 
           >
             Crear Historia
           </button>
-          <button className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+          <button
+            className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md border border-input bg-background px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            onClick={openSessionModal}
+          >
             Crear Sesión
           </button>
         </div>

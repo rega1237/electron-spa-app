@@ -16,27 +16,27 @@ const DisplayCorporalHistory = () => {
   const alergiasCorporal = Object.values(historiaCorporal).slice(2, 6)
   const antecedentes = Object.values(historiaCorporal).slice(6, 15)
   const motivoCorporal = Object.values(historiaCorporal).slice(15, 20)
-  const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 22)
+  const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 23)
 
   return (
     <>
       <div className="no-scrollbar overflow-x-hidden overflow-y-scroll rounded-b-[10px] bg-primary p-5">
         <Link to={`/paciente/${paciente.id}`}>
-          <button type="button" class="px-3 py-2 text-primary-foreground hover:text-primary">
-            <div class="flex flex-row align-middle">
+          <button type="button" className="px-3 py-2 text-primary-foreground hover:text-primary">
+            <div className="flex flex-row align-middle">
               <svg
-                class="mr-2 w-5"
+                className="mr-2 w-5"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg>
-              <p class="ml-2">Atras</p>
+              <p className="ml-2">Atras</p>
             </div>
           </button>
         </Link>
@@ -50,7 +50,7 @@ const DisplayCorporalHistory = () => {
           <div className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {Object.keys(alergias).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_alergias`}>
                   <p>{item}:</p>
                   <p className="font-bold">
                     {alergiasCorporal[index] == '' ? 'Ninguno' : alergiasCorporal[index]}
@@ -61,7 +61,7 @@ const DisplayCorporalHistory = () => {
 
             {Object.keys(bodyClinicBackground).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_antecedentes`}>
                   <p>{item}:</p>
                   <p className="font-bold">{antecedentes[index] ? 'Si' : 'No'}</p>
                 </div>
@@ -76,17 +76,17 @@ const DisplayCorporalHistory = () => {
             {Object.keys(motivoConsulta).map((item, index) => {
               if (item === 'Otros') {
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2" key={`${index}_motivo`}>
                     <p>{item}:</p>
                     <p className="font-bold">
-                      {motivoCorporal[index] == '' ? 'Ninguno' : alergiasCorporal[index]}
+                      {motivoCorporal[index] == '' ? 'Ninguno' : motivoCorporal[index]}
                     </p>
                   </div>
                 )
               }
 
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_motivo`}>
                   <p>{item}:</p>
                   <p className="font-bold">{motivoCorporal[index] ? 'Si' : 'No'}</p>
                 </div>
@@ -102,7 +102,7 @@ const DisplayCorporalHistory = () => {
           <div className="mt-3 grid grid-cols-2 gap-4">
             {Object.keys(antecedentesQuirurgicos).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_quirurgicos`}>
                   <p>{item}:</p>
                   <p className="font-bold">
                     {antecedentesQuirurgicosCorporal[index] == ''
