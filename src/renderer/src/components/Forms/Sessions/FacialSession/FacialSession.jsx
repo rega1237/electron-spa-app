@@ -30,11 +30,7 @@ const FacialSession = ({ handleToggleModal, action, sesion }) => {
       const id = sesion.id
       sqlSesion = await editSesionFacial(id, notas)
     } else {
-      sqlSesion = await addSesionFacial({
-        notas: notas,
-        fecha: date,
-        paciente: paciente
-      })
+      sqlSesion = await addSesionFacial(notas, date, paciente)
     }
 
     if (sqlSesion) {
