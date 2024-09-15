@@ -38,6 +38,7 @@ const NewSessions = ({ handleToggleModal }) => {
               Corporal
             </button>
           </div>
+
           {facialForm ? (
             <FacialSession handleToggleModal={handleToggleModal} />
           ) : (
