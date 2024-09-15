@@ -15,7 +15,10 @@ const ModalAccount = ({ formType, handleToggleModal, newHistoryAction, type, del
   }
 
   if (formType === 'newClient') {
-    return createPortal(<NewClient handleToggleModal={handleToggleModal} />, modalContainer)
+    return createPortal(
+      <NewClient handleToggleModal={handleToggleModal} newHistoryAction={newHistoryAction} type={type} />,
+      modalContainer
+    )
   } else if (formType === 'newAppointment') {
     return createPortal(<Newappointment handleToggleModal={handleToggleModal} />, modalContainer)
   } else if (formType === 'newHistory') {
