@@ -37,7 +37,7 @@ export const handleDate = () => {
   return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`
 }
 
-const fillKeysObjects = (keys, values) => {
+export const fillKeysObjects = (keys, values) => {
   const obj = {}
   keys.forEach((key, index) => {
     obj[key] = values[index]
