@@ -7,6 +7,11 @@ const Appoinments = () => {
   const [citas, setCitas] = useState([])
   const [proximasCitas, setProximasCitas] = useState(true)
   const citasStore = useCitas((state) => state.citas)
+  const getCitas = useCitas((state) => state.getCitas)
+
+  useEffect(() => {
+    getCitas()
+  }, [])
 
   useEffect(() => {
     if (proximasCitas) {
