@@ -26,6 +26,6 @@ export const motivoConsulta = {
 }
 
 export const antecedentesQuirurgicos = {
-  Implantes: false,
-  Cirugia: false
+  Implantes: '',
+  Cirugia: ''
 }
