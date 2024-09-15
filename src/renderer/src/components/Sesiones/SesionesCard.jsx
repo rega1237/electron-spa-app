@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import useSesion from '../../store/sesionesStore'
-import usePaciente from '../../store/pacienteStore'
 import ModalAccount from '../Modal/ModalContainer'
 
 const SesionesCard = ({ sesion }) => {
@@ -9,6 +8,7 @@ const SesionesCard = ({ sesion }) => {
   const deleteSesionCorporal = useSesion((state) => state.deleteSesionCorporal)
 
   const [isModalDialogueOpen, setIsModalDialogueOpen] = useState(false)
+  const [isModalSessionEdit, setIsModalSessionEditOpen] = useState(false)
   const [displaySesion, setDisplaySesion] = useState(false)
 
   const handleDialogueModal = () => {
@@ -17,6 +17,10 @@ const SesionesCard = ({ sesion }) => {
 
   const handleDisplaySession = () => {
     setDisplaySesion(!displaySesion)
+  }
+
+  const handleToggleSessionModal = () => {
+    setIsModalSessionEditOpen(!isModalSessionEdit)
   }
 
   const deleteSesion = (sesion) => {
@@ -48,7 +52,7 @@ const SesionesCard = ({ sesion }) => {
           <button className="hover:text-primary" onClick={handleDisplaySession}>
             Abrir
           </button>
-          <button className="hover:text-primary" onClick={() => console.log('hola')}>
+          <button className="hover:text-primary" onClick={handleToggleSessionModal}>
             Editar
           </button>
           <button className="hover:text-primary" onClick={handleDialogueModal}>
@@ -68,6 +72,13 @@ const SesionesCard = ({ sesion }) => {
         <ModalAccount
           formType={'displaySession'}
           handleToggleModal={handleDisplaySession}
+          type={sesion}
+        />
+      )}
+      {isModalSessionEdit && (
+        <ModalAccount
+          formType={'editSession'}
+          handleToggleModal={handleToggleSessionModal}
           type={sesion}
         />
       )}
