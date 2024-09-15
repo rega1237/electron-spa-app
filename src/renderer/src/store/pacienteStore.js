@@ -52,6 +52,39 @@ export const usePaciente = create((set, get) => ({
     }
   },
   setPaciente: (paciente) => set((state) => ({ paciente: paciente })),
+  editPaciente: async ({ id, nombre_completo, cedula, fecha_de_nacimiento, telefono }) => {
+    try {
+      await turso.execute({
+        sql: 'UPDATE pacientes SET nombre_completo = :nombre_completo, cedula = :cedula, fecha_de_nacimiento = :fecha_de_nacimiento, telefono = :telefono WHERE id = :id',
+        args: {
+          id: id,
+          nombre_completo: nombre_completo,
+          cedula: cedula,
+          fecha_de_nacimiento: fecha_de_nacimiento,
+          telefono: telefono
+        }
+      })
+
+      const storedPacientes = get().pacientes
+      const updatedPacientes = storedPacientes.map((paciente) => {
+        if (paciente.id === id) {
+          paciente.nombre_completo = nombre_completo
+          paciente.cedula = cedula
+          paciente.telefono = telefono
+          paciente.fecha_de_nacimiento = fecha_de_nacimiento
+        }
+        return paciente
+      })
+
+      set({ pacientes: updatedPacientes })
+      localStorage.setItem('pacientes', JSON.stringify(updatedPacientes))
+      return true
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al editar el paciente')
+      return false
+    }
+  },
   deletePaciente: async (id) => {
     try {
       await turso.execute({
@@ -71,6 +104,11 @@ export const usePaciente = create((set, get) => ({
 
       await turso.execute({
         sql: 'DELETE FROM sesion_corporal WHERE paciente_id = :id',
+        args: { id: id }
+      })
+
+      await turso.execute({
+        sql: 'DELETE FROM citas WHERE paciente_id = :id',
         args: { id: id }
       })
 

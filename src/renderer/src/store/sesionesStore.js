@@ -6,15 +6,13 @@ export const useSesion = create((set, get) => ({
   getSesiones: async (paciente) => {
     const pacienteID = paciente.id
 
-    const sesionFacial = await turso.execute({
-      sql: 'SELECT * FROM sesion_facial WHERE paciente_id = :paciente_id',
-      args: { paciente_id: pacienteID }
-    })
+    const sesionFacial = await turso.execute(
+      `SELECT * FROM sesion_facial WHERE paciente_id = ${pacienteID}`
+    )
 
-    const sesionCorporal = await turso.execute({
-      sql: 'SELECT * FROM sesion_corporal WHERE paciente_id = :paciente_id',
-      args: { paciente_id: pacienteID }
-    })
+    const sesionCorporal = await turso.execute(
+      `SELECT * FROM sesion_corporal WHERE paciente_id = ${pacienteID}`
+    )
 
     const sesionesOrdenada = [...sesionCorporal.rows, ...sesionFacial.rows].sort((a, b) => {
       return new Date(b.fecha) - new Date(a.fecha)
@@ -88,9 +86,8 @@ export const useSesion = create((set, get) => ({
     }
   },
   editSesionFacial: async (id, notas) => {
-    console.log(id, 'id')
-
     try {
+      console.log('hola edit')
       await turso.execute({
         sql: `UPDATE sesion_facial SET notas = :notas WHERE id = ${id}`,
         args: { notas: notas }
@@ -155,13 +152,13 @@ export const useSesion = create((set, get) => ({
         args: { id: id }
       })
 
-      const sesionFacial = get().sesiones.filter(
+      const filterSesiones = get().sesiones.filter(
         (sesion) => sesion.id !== id && sesion.sesion === 'Facial'
       )
 
-      set({ sesionFacial: sesionFacial })
+      set({ sesiones: filterSesiones })
 
-      localStorage.setItem('sesionFacial', JSON.stringify(sesionFacial))
+      localStorage.setItem('sesionFacial', JSON.stringify(filterSesiones))
 
       return true
     } catch (error) {
@@ -177,13 +174,13 @@ export const useSesion = create((set, get) => ({
         args: { id: id }
       })
 
-      const sesionCorporal = get().sesiones.filter(
+      const filterSesiones = get().sesiones.filter(
         (sesion) => sesion.id !== id && sesion.sesion === 'Corporal'
       )
 
-      set({ sesionCorporal: sesionCorporal })
+      set({ sesiones: filterSesiones })
 
-      localStorage.setItem('sesionCorporal', JSON.stringify(sesionCorporal))
+      localStorage.setItem('sesionCorporal', JSON.stringify(filterSesiones))
 
       return true
     } catch (error) {
