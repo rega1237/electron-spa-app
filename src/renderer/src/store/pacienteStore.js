@@ -51,7 +51,44 @@ export const usePaciente = create((set, get) => ({
       alert('Error al guardar el paciente')
     }
   },
-  setPaciente: (paciente) => set((state) => ({ paciente: paciente }))
+  setPaciente: (paciente) => set((state) => ({ paciente: paciente })),
+  deletePaciente: async (id) => {
+    try {
+      await turso.execute({
+        sql: 'DELETE FROM historia_facial WHERE paciente_id = :id',
+        args: { id: id }
+      })
+
+      await turso.execute({
+        sql: 'DELETE FROM historia_corporal WHERE paciente_id = :id',
+        args: { id: id }
+      })
+
+      await turso.execute({
+        sql: 'DELETE FROM sesion_facial WHERE paciente_id = :id',
+        args: { id: id }
+      })
+
+      await turso.execute({
+        sql: 'DELETE FROM sesion_corporal WHERE paciente_id = :id',
+        args: { id: id }
+      })
+
+      await turso.execute({
+        sql: 'DELETE FROM pacientes WHERE id = :id',
+        args: { id: id }
+      })
+
+      const storedPacientes = get().pacientes
+      const filteredPacientes = storedPacientes.filter((paciente) => paciente.id !== id)
+
+      set({ pacientes: filteredPacientes })
+      localStorage.setItem('pacientes', JSON.stringify(filteredPacientes))
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al eliminar el paciente')
+    }
+  }
 }))
 
 export default usePaciente

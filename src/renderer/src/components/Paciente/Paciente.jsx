@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import HistoryCard from './History_card/HistoryCard'
@@ -13,6 +13,7 @@ import useSesion from '../../store/sesionesStore'
 
 const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   const { pacienteID } = useParams()
+  const navigate = useNavigate()
 
   const [citas, setCitas] = useState([])
   const [displayHistory, setDisplayHistory] = useState(true)
@@ -29,10 +30,16 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   const getHistoriaCorporal = useHistoriaCorporal((state) => state.getHistoriaCorporal)
   const sesionesStore = useSesion((state) => state.sesiones)
   const getSesiones = useSesion((state) => state.getSesiones)
+  const deletePaciente = usePaciente((state) => state.deletePaciente)
 
   const getCita = (paciente) => {
     const citasPaciente = citasStore.filter((cita) => cita.paciente_id === paciente.id)
     setCitas(citasPaciente)
+  }
+
+  const handleDeletePaciente = async () => {
+    await deletePaciente(paciente.id)
+    navigate('/')
   }
 
   const handlePaciente = async (paciente) => {
@@ -108,7 +115,10 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
               <button className="bg-secondary px-5 py-1 text-primary-foreground hover:bg-secondary-foreground hover:text-primary">
                 Editar
               </button>
-              <button className="bg-secondary px-5 py-1 text-primary-foreground hover:bg-secondary-foreground hover:text-primary">
+              <button
+                className="bg-secondary px-5 py-1 text-primary-foreground hover:bg-secondary-foreground hover:text-primary"
+                onClick={handleDeletePaciente}
+              >
                 Eliminar
               </button>
             </div>
@@ -176,10 +186,7 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
                 <div className="mt-3 grid grid-cols-3 gap-4">
                   {sesionesStore.length === 0 && <p>No hay sesiones</p>}
                   {sesionesStore.map((sesion) => (
-                    <SesionesCard
-                      key={`${sesion.id}-${sesion.sesion}`}
-                      sesion={sesion}
-                    />
+                    <SesionesCard key={`${sesion.id}-${sesion.sesion}`} sesion={sesion} />
                   ))}
                 </div>
               </div>
