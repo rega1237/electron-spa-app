@@ -1,31 +1,43 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { handleText, handleTextArea, handleDate } from '../../HistoryForm/handleFunctions'
 import { ipcHandleImages, handleImageInput } from '../../../../Constants/ipcHandle'
 import { medidas } from '../../../../Constants/bodySessionConstants'
+import { setEditValues } from '../utils/setEditValues'
 
-import useSesionesStore from '../../../../store/sesionesStore'
+import useSesion from '../../../../store/sesionesStore'
 import usePaciente from '../../../../store/pacienteStore'
 
 import InputText from '../../../UI/Inputs/InputText'
 
-const BodySession = ({ handleToggleModal }) => {
+const BodySession = ({ handleToggleModal, action, sesion }) => {
   const [medidasForm, setMedidas] = useState(medidas)
   const [notas, setNotas] = useState('')
   const [nextSesion, setNextSesion] = useState('')
   const [images, setImages] = useState([])
 
-  const addNewBodySession = useSesionesStore((state) => state.addSesionCorporal)
+  useEffect(() => {
+    if (action === 'edit') {
+      setEditValues(sesion, setMedidas, setNextSesion, setNotas)
+    }
+  }, [])
+
+  const addNewBodySession = useSesion((state) => state.addSesionCorporal)
+  const editSesionCorporal = useSesion((state) => state.editSesionCorporal)
 
   const date = handleDate()
 
   const paciente = usePaciente((state) => state.paciente)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    let sqlSesion
+
     const data = {
+      ...(action === 'edit' && { id: sesion.id }),
       peso: medidasForm.Peso,
       cintura: medidasForm.Cintura,
+      busto: medidasForm.Busto,
       cadera: medidasForm.Cadera,
       abdomen: medidasForm.Abdomen,
       brazo_der: medidasForm['Brazo derecho'],
@@ -36,17 +48,33 @@ const BodySession = ({ handleToggleModal }) => {
       pant_izq: medidasForm['Pantorrilla izquierda'],
       prox_sesion: nextSesion,
       notas: notas,
+      sesion: 'Corporal',
       fecha: date,
-      paciente_id: paciente.id
+      ...(action != 'edit' && { paciente_id: paciente.id })
     }
 
-    const newSession = addNewBodySession(data)
-
-    if (newSession) {
-      ipcHandleImages(images, paciente['nombre_completo'], date, paciente['cedula'], 'corporal')
+    if (action === 'edit') {
+      data.fecha = sesion.fecha
+      sqlSesion = await editSesionCorporal(data)
+    } else {
+      sqlSesion = await addNewBodySession(data)
     }
 
-    handleToggleModal()
+    if (sqlSesion) {
+      if (action === 'edit') {
+        ipcHandleImages(
+          images,
+          paciente['nombre_completo'],
+          sesion.fecha,
+          paciente['cedula'],
+          'corporal'
+        )
+      } else {
+        ipcHandleImages(images, paciente['nombre_completo'], date, paciente['cedula'], 'corporal')
+      }
+
+      handleToggleModal()
+    }
   }
 
   return (

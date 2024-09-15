@@ -1,24 +1,55 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { handleTextArea, handleDate } from '../../HistoryForm/handleFunctions'
 import { ipcHandleImages, handleImageInput } from '../../../../Constants/ipcHandle'
 import usePaciente from '../../../../store/pacienteStore'
 import useSesion from '../../../../store/sesionesStore'
 
-const FacialSession = ({ handleToggleModal }) => {
+const FacialSession = ({ handleToggleModal, action, sesion }) => {
   const [notas, setNotas] = useState('')
   const [images, setImages] = useState([])
 
   const paciente = usePaciente((state) => state.paciente)
   const addSesionFacial = useSesion((state) => state.addSesionFacial)
+  const editSesionFacial = useSesion((state) => state.editSesionFacial)
 
   const date = handleDate()
 
+  useEffect(() => {
+    if (action === 'edit') {
+      setNotas(sesion.notas)
+    }
+  }, [])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const createSesion = await addSesionFacial(notas, date, paciente)
-    if (createSesion) {
-      ipcHandleImages(images, paciente['nombre_completo'], date, paciente['cedula'], 'facial')
+
+    let sqlSesion
+
+    if (action === 'edit') {
+      const id = sesion.id
+      sqlSesion = await editSesionFacial(id, notas)
+    } else {
+      sqlSesion = await addSesionFacial({
+        notas: notas,
+        fecha: date,
+        paciente: paciente
+      })
+    }
+
+    if (sqlSesion) {
+      if (action === 'edit') {
+        ipcHandleImages(
+          images,
+          paciente['nombre_completo'],
+          sesion.fecha,
+          paciente['cedula'],
+          'facial'
+        )
+      } else {
+        ipcHandleImages(images, paciente['nombre_completo'], date, paciente['cedula'], 'facial')
+      }
+
       handleToggleModal()
     }
   }
