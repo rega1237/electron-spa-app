@@ -46,9 +46,11 @@ export const usePaciente = create((set, get) => ({
       const getPacientes = get().pacientes
 
       localStorage.setItem('pacientes', JSON.stringify(getPacientes))
+      return true
     } catch (error) {
       console.error(error.message)
       alert('Error al guardar el paciente')
+      return false
     }
   },
   setPaciente: (paciente) => set((state) => ({ paciente: paciente })),
@@ -122,6 +124,10 @@ export const usePaciente = create((set, get) => ({
 
       set({ pacientes: filteredPacientes })
       localStorage.setItem('pacientes', JSON.stringify(filteredPacientes))
+
+      const citas = JSON.parse(localStorage.getItem('citas'))
+      const filteredCitas = citas.filter((cita) => cita.paciente_id !== id)
+      localStorage.setItem('citas', JSON.stringify(filteredCitas))
     } catch (error) {
       console.error(error.message)
       alert('Error al eliminar el paciente')
