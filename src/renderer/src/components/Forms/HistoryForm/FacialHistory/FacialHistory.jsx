@@ -199,7 +199,11 @@ const FacialHistory = ({ handleToggleModal, newHistoryAction }) => {
           <div>
             <h3 className="mt-5 w-[200px] border-b text-lg font-semibold">Fototipo de piel</h3>
             <div className="mt-3 flex flex-1 items-center gap-2">
-              <select onChange={(e) => handleSelect(e, fototipo, setFototipo)} value={fototipo}>
+              <select
+                onChange={(e) => handleSelect(e, fototipo, setFototipo)}
+                value={fototipo}
+                required
+              >
                 <option value="">Selecciona un fototipo</option>
                 <option value="I">I</option>
                 <option value="II">II</option>
