@@ -19,8 +19,6 @@ function App() {
   const [newHistoryAction, setNewHistoryAction] = useState('')
   const [search, setSearch] = useState('')
 
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-
   const getPacientes = usePaciente((state) => state.getPacientes)
   const getCitas = useCitas((state) => state.getCitas)
 
