@@ -113,7 +113,7 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
       const pacienteID = paciente.id
       await getSesiones(pacienteID)
     }
-    if(pacienteLoaded) {
+    if (pacienteLoaded) {
       updateSessions()
     }
   }, [sesionesStore.length])
