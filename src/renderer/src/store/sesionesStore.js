@@ -2,58 +2,27 @@ import { create } from 'zustand'
 import turso from './turso'
 
 export const useSesion = create((set, get) => ({
-  sesionFacial: [],
-  sesionCorporal: [],
   sesiones: [],
-  getSesionFacial: async (paciente) => {
-    try {
-      const storedSesionFacial = JSON.parse(localStorage.getItem('sesionFacial'))
+  getSesiones: async (paciente) => {
+    const pacienteID = paciente.id
 
-      const pacienteID = paciente.id
+    const sesionFacial = await turso.execute({
+      sql: 'SELECT * FROM sesion_facial WHERE paciente_id = :paciente_id',
+      args: { paciente_id: pacienteID }
+    })
 
-      if (storedSesionFacial) {
-        if (storedSesionFacial[0]['paciente_id'] == pacienteID) {
-          set({ sesionFacial: storedSesionFacial })
-          return
-        }
-      }
+    const sesionCorporal = await turso.execute({
+      sql: 'SELECT * FROM sesion_corporal WHERE paciente_id = :paciente_id',
+      args: { paciente_id: pacienteID }
+    })
 
-      const sesionFacial = await turso.execute({
-        sql: 'SELECT * FROM sesion_facial WHERE paciente_id = :paciente_id',
-        args: { paciente_id: pacienteID }
-      })
+    const sesionesOrdenada = [...sesionCorporal.rows, ...sesionFacial.rows].sort((a, b) => {
+      return new Date(b.fecha) - new Date(a.fecha)
+    })
 
-      set({ sesionFacial: sesionFacial.rows })
-      localStorage.setItem('sesionFacial', JSON.stringify(sesionFacial.rows))
-    } catch (error) {
-      alert('Error al obtener las sesiones faciales')
-      console.error(error)
-    }
-  },
-  getSesionCorporal: async (paciente) => {
-    try {
-      const storedSesionCorporal = localStorage.getItem('sesionCorporal')
+    set({ sesiones: sesionesOrdenada })
 
-      const pacienteID = paciente.id
-
-      if (storedSesionCorporal) {
-        if (storedSesionCorporal.paciente_id === pacienteID) {
-          set({ sesionCorporal: JSON.parse(storedHistoriaCorporal) })
-          return
-        }
-      }
-
-      const sesionCorporal = await turso.execute({
-        sql: 'SELECT * FROM sesion_corporal WHERE paciente_id = :paciente_id',
-        args: { paciente_id: pacienteID }
-      })
-
-      set({ sesionCorporal: sesionCorporal.rows })
-      localStorage.setItem('sesionCorporal', JSON.stringify(sesionCorporal.rows))
-    } catch (error) {
-      alert('Error al obtener las sesiones corporales')
-      console.error(error)
-    }
+    localStorage.setItem('sesiones', JSON.stringify(sesionesOrdenada))
   },
   addSesionFacial: async (notas, fecha, paciente) => {
     try {
@@ -73,14 +42,14 @@ export const useSesion = create((set, get) => ({
 
       set((state) => ({
         sesionFacial: [
-          ...state.sesionFacial,
+          ...state.sesiones,
           { id: id, paciente_id: pacienteId, sesion: 'Facial', notas: notas, fecha: fecha }
         ]
       }))
 
-      const getSesionFacial = get().sesionFacial
+      const getSesiones = get().sesiones
 
-      localStorage.setItem('sesionFacial', JSON.stringify(getSesionFacial))
+      localStorage.setItem('sesiones', JSON.stringify(getSesiones))
 
       return true
     } catch (error) {
@@ -88,17 +57,6 @@ export const useSesion = create((set, get) => ({
       alert('Error al guardar la sesion facial')
       return false
     }
-  },
-  getSesiones: async () => {
-    const sesionFacial = await get().sesionFacial
-    const sesionCorporal = await get().sesionCorporal
-    const sesionesOrdenada = [...sesionCorporal, ...sesionFacial].sort((a, b) => {
-      return new Date(b.fecha) - new Date(a.fecha)
-    })
-
-    set({ sesiones: sesionesOrdenada })
-
-    localStorage.setItem('sesiones', JSON.stringify(sesionesOrdenada))
   },
   addSesionCorporal: async (data) => {
     try {
@@ -115,17 +73,78 @@ export const useSesion = create((set, get) => ({
       const id = parseInt(sqlAction.lastInsertRowid.toString())
 
       set((state) => ({
-        sesionCorporal: [...state.sesionCorporal, { id: id, ...data }]
+        sesiones: [...state.sesiones, { id: id, ...data }]
       }))
 
-      const getSesionCorporal = get().sesionCorporal
+      const getSesiones = get().sesiones
 
-      localStorage.setItem('sesionCorporal', JSON.stringify(getSesionCorporal))
+      localStorage.setItem('sesionCorporal', JSON.stringify(getSesiones))
 
       return true
     } catch (error) {
       console.error(error.message)
       alert('Error al guardar la sesion corporal')
+      return false
+    }
+  },
+  editSesionFacial: async (id, notas) => {
+    console.log(id, 'id')
+
+    try {
+      await turso.execute({
+        sql: `UPDATE sesion_facial SET notas = :notas WHERE id = ${id}`,
+        args: { notas: notas }
+      })
+
+      const changeSesionValue = get().sesiones.map((sesion) => {
+        if (sesion.id === id && sesion.sesion === 'Facial') {
+          sesion.notas = notas
+        }
+
+        return sesion
+      })
+
+      set({ sesiones: changeSesionValue })
+
+      localStorage.setItem('sesiones', JSON.stringify(changeSesionValue))
+
+      return true
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al editar la sesion facial')
+      return false
+    }
+  },
+  editSesionCorporal: async (data) => {
+    try {
+      console.log(data)
+      const keys = Object.keys(data)
+        .map((key) => `${key} = :${key}`)
+        .join(', ')
+
+      const id = data.id
+
+      await turso.execute({
+        sql: `UPDATE sesion_corporal SET ${keys} WHERE id = ${id}`,
+        args: data
+      })
+
+      const changeSesionValue = get().sesiones.map((sesion) => {
+        if (sesion.id === id && sesion.sesion === 'Corporal') {
+          return (sesion = data)
+        } else {
+          return sesion
+        }
+      })
+
+      set({ sesiones: changeSesionValue })
+
+      localStorage.setItem('sesionCorporal', JSON.stringify(changeSesionValue))
+
+      return true
+    } catch (error) {
+      console.error(error.message)
+      alert('Error al editar la sesion corporal')
       return false
     }
   },
@@ -136,7 +155,9 @@ export const useSesion = create((set, get) => ({
         args: { id: id }
       })
 
-      const sesionFacial = get().sesionFacial.filter((sesion) => sesion.id !== id)
+      const sesionFacial = get().sesiones.filter(
+        (sesion) => sesion.id !== id && sesion.sesion === 'Facial'
+      )
 
       set({ sesionFacial: sesionFacial })
 
@@ -156,7 +177,9 @@ export const useSesion = create((set, get) => ({
         args: { id: id }
       })
 
-      const sesionCorporal = get().sesionCorporal.filter((sesion) => sesion.id !== id)
+      const sesionCorporal = get().sesiones.filter(
+        (sesion) => sesion.id !== id && sesion.sesion === 'Corporal'
+      )
 
       set({ sesionCorporal: sesionCorporal })
 
