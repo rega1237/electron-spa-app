@@ -16,7 +16,10 @@ const DisplayCorporalHistory = () => {
   const alergiasCorporal = Object.values(historiaCorporal).slice(2, 6)
   const antecedentes = Object.values(historiaCorporal).slice(6, 15)
   const motivoCorporal = Object.values(historiaCorporal).slice(15, 20)
-  const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 22)
+  const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 23)
+
+  console.log(historiaCorporal)
+
 
   return (
     <>
@@ -50,7 +53,7 @@ const DisplayCorporalHistory = () => {
           <div className="mt-3 grid grid-cols-1 gap-4 lg:grid-cols-2">
             {Object.keys(alergias).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_alergias`}>
                   <p>{item}:</p>
                   <p className="font-bold">
                     {alergiasCorporal[index] == '' ? 'Ninguno' : alergiasCorporal[index]}
@@ -61,7 +64,7 @@ const DisplayCorporalHistory = () => {
 
             {Object.keys(bodyClinicBackground).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_antecedentes`}>
                   <p>{item}:</p>
                   <p className="font-bold">{antecedentes[index] ? 'Si' : 'No'}</p>
                 </div>
@@ -76,17 +79,17 @@ const DisplayCorporalHistory = () => {
             {Object.keys(motivoConsulta).map((item, index) => {
               if (item === 'Otros') {
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2" key={`${index}_motivo`}>
                     <p>{item}:</p>
                     <p className="font-bold">
-                      {motivoCorporal[index] == '' ? 'Ninguno' : alergiasCorporal[index]}
+                      {motivoCorporal[index] == '' ? 'Ninguno' : motivoCorporal[index]}
                     </p>
                   </div>
                 )
               }
 
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_motivo`}>
                   <p>{item}:</p>
                   <p className="font-bold">{motivoCorporal[index] ? 'Si' : 'No'}</p>
                 </div>
@@ -102,7 +105,7 @@ const DisplayCorporalHistory = () => {
           <div className="mt-3 grid grid-cols-2 gap-4">
             {Object.keys(antecedentesQuirurgicos).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2"  key={`${index}_quirurgicos`}>
                   <p>{item}:</p>
                   <p className="font-bold">
                     {antecedentesQuirurgicosCorporal[index] == ''

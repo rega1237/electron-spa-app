@@ -52,7 +52,7 @@ const DisplayFacialHistory = () => {
             {Object.keys(facialHistoryClinicBackground).map((item, index) => {
               if (item === 'Medicamentos Actuales') {
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2" key={`${index}_${item}`}>
                     <p>{item}:</p>
                     <p className="font-bold">
                       {clinicFacial[index] == '' ? 'Ninguno' : clinicFacial[index]}
@@ -62,7 +62,7 @@ const DisplayFacialHistory = () => {
               }
 
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_${item}`}>
                   <p>{item}:</p>
                   <p className="font-bold">{clinicFacial[index] ? 'Si' : 'No'}</p>
                 </div>
@@ -77,7 +77,7 @@ const DisplayFacialHistory = () => {
             {Object.keys(facialHistoryAestheticBackground).map((item, index) => {
               if (item === 'Otros') {
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2" key={`${index}_${item}`}>
                     <p>{item}:</p>
                     <p className="font-bold">
                       {esteticaFacial[index] == '' ? 'Ninguno' : esteticaFacial[index]}
@@ -87,7 +87,7 @@ const DisplayFacialHistory = () => {
               }
 
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_${item}`}>
                   <p>{item}:</p>
                   <p className="font-bold">{esteticaFacial[index] ? 'Si' : 'No'}</p>
                 </div>
@@ -110,7 +110,7 @@ const DisplayFacialHistory = () => {
               {Object.keys(tipologiaCutanea).map((item, index) => {
                 if (item === 'Otro') {
                   return (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" key={`${index}_${item}`}>
                       <p>{item}:</p>
                       <p className="font-bold">
                         {tipologiaFacial[index] == '' ? 'Ninguno' : tipologiaFacial[index]}
@@ -120,7 +120,7 @@ const DisplayFacialHistory = () => {
                 }
 
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2" key={`${index}_${item}`}>
                     <p>{item}:</p>
                     <p className="font-bold">{tipologiaFacial[index] ? 'Si' : 'No'}</p>
                   </div>
@@ -137,7 +137,7 @@ const DisplayFacialHistory = () => {
           <div className="mt-3 grid grid-cols-3 gap-4">
             {Object.keys(cuidadoPiel).map((item, index) => {
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_${item}`}>
                   <p>{item}:</p>
                   <p className="font-bold">
                     {cuidadoFacial[index] == '' ? 'Ninguno' : cuidadoFacial[index]}
@@ -155,7 +155,7 @@ const DisplayFacialHistory = () => {
               if (item.includes('acn')) {
                 if (item.includes('Piel')) {
                   return (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" key={`${index}_${item}`}>
                       <p>{item}:</p>
                       <p className="font-bold">{patologiasFacial[index] ? 'Si' : 'No'}</p>
                     </div>
@@ -163,7 +163,7 @@ const DisplayFacialHistory = () => {
                 }
 
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2" key={`${index}_${item}`}>
                     <p>{item}:</p>
                     <p className="font-bold">
                       {patologiasFacial[index] ? 'No' : patologiasFacial[index]}
@@ -173,7 +173,7 @@ const DisplayFacialHistory = () => {
               }
 
               return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2" key={`${index}_${item}`}>
                   <p>{item}:</p>
                   <p className="font-bold">{patologiasFacial[index] ? 'Si' : 'No'}</p>
                 </div>
