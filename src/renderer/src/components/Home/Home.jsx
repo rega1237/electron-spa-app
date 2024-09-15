@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import TableBody from '../Pacientes/TableBody'
 import Appoinments from '../Appoinments/Appoinments'
-import useCitas from '../../store/citasStore'
 
 const Home = ({ search, toggleNewAppointment, toggleNewHistory, toggleNewSession }) => {
   const [patientsTable, setPatientsTable] = useState(true)
