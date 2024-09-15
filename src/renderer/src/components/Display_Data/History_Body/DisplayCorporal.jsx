@@ -18,9 +18,6 @@ const DisplayCorporalHistory = () => {
   const motivoCorporal = Object.values(historiaCorporal).slice(15, 20)
   const antecedentesQuirurgicosCorporal = Object.values(historiaCorporal).slice(20, 23)
 
-  console.log(historiaCorporal)
-
-
   return (
     <>
       <div className="no-scrollbar overflow-x-hidden overflow-y-scroll rounded-b-[10px] bg-primary p-5">
@@ -105,7 +102,7 @@ const DisplayCorporalHistory = () => {
           <div className="mt-3 grid grid-cols-2 gap-4">
             {Object.keys(antecedentesQuirurgicos).map((item, index) => {
               return (
-                <div className="flex items-center gap-2"  key={`${index}_quirurgicos`}>
+                <div className="flex items-center gap-2" key={`${index}_quirurgicos`}>
                   <p>{item}:</p>
                   <p className="font-bold">
                     {antecedentesQuirurgicosCorporal[index] == ''

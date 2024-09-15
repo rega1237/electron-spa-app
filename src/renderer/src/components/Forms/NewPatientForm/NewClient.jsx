@@ -8,7 +8,7 @@ const NewClient = ({ handleToggleModal, newHistoryAction, type }) => {
   const [telefono, setTelefono] = useState('')
   const [birthdate, setBirthdate] = useState('')
 
-  let sqlPaciente;
+  let sqlPaciente
 
   const navigate = useNavigate()
 
@@ -26,13 +26,24 @@ const NewClient = ({ handleToggleModal, newHistoryAction, type }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if(newHistoryAction === 'edit') {
-      sqlPaciente = await editPaciente({ id: type.id, nombre_completo: nombre, cedula, fecha_de_nacimiento: birthdate, telefono })
+    if (newHistoryAction === 'edit') {
+      sqlPaciente = await editPaciente({
+        id: type.id,
+        nombre_completo: nombre,
+        cedula,
+        fecha_de_nacimiento: birthdate,
+        telefono
+      })
     } else {
-      sqlPaciente = await addPaciente({ nombre_completo: nombre, cedula, fecha_de_nacimiento: birthdate, telefono })
+      sqlPaciente = await addPaciente({
+        nombre_completo: nombre,
+        cedula,
+        fecha_de_nacimiento: birthdate,
+        telefono
+      })
     }
 
-    if(sqlPaciente) {
+    if (sqlPaciente) {
       handleToggleModal()
       const pacientes = JSON.parse(localStorage.getItem('pacientes'))
       const id = newHistoryAction === 'edit' ? type.id : pacientes[pacientes.length - 1].id

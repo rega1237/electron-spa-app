@@ -218,7 +218,12 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
       )}
 
       {editPaciente && (
-        <ModalAccount formType="newClient" handleToggleModal={handleToggleEditPatient} newHistoryAction={'edit'} type={paciente} />
+        <ModalAccount
+          formType="newClient"
+          handleToggleModal={handleToggleEditPatient}
+          newHistoryAction={'edit'}
+          type={paciente}
+        />
       )}
     </>
   )
