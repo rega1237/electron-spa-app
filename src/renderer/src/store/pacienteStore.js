@@ -39,7 +39,13 @@ export const usePaciente = create((set, get) => ({
       set((state) => ({
         pacientes: [
           ...state.pacientes,
-          { id: id, nombre_completo: nombre_completo, cedula: cedula, telefono: telefono }
+          {
+            id: id,
+            nombre_completo: nombre_completo,
+            cedula: cedula,
+            fecha_de_nacimiento: fecha_de_nacimiento,
+            telefono: telefono
+          }
         ]
       }))
 

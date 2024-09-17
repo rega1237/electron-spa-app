@@ -11,6 +11,7 @@ import usePaciente from '../../store/pacienteStore'
 import useHistoriaCorporal from '../../store/bodyHistoryStore'
 import useSesion from '../../store/sesionesStore'
 import ModalAccount from '../Modal/ModalContainer'
+import Loading from '../UI/Loading/Loading'
 
 const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   const { pacienteID } = useParams()
@@ -22,6 +23,8 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   const [displayAppoinments, setDisplayAppoinments] = useState(false)
   const [displaySesiones, setDisplaySesiones] = useState(false)
   const [displayDialogue, setDisplayDialogue] = useState(false)
+  const [pacienteLoaded, setPacienteLoaded] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const pacientes = usePaciente((state) => state.pacientes)
   const paciente = usePaciente((state) => state.paciente)
@@ -46,10 +49,12 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
   }
 
   const handlePaciente = async (paciente) => {
+    const pacienteID = paciente.id
+    console.log(pacienteID)
     await setPaciente(paciente)
     await getHistoriaFacial(paciente)
     await getHistoriaCorporal(paciente)
-    await getSesiones(paciente)
+    await getSesiones(pacienteID)
     getCita(paciente)
   }
 
@@ -79,17 +84,43 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
     setEditPaciente(!editPaciente)
   }
 
+  const getAge = (date) => {
+    const today = new Date()
+    const birthDate = new Date(date)
+    const age = today.getFullYear() - birthDate.getFullYear()
+    const month = today.getMonth() - birthDate.getMonth()
+
+    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+      return age - 1
+    }
+
+    return age
+  }
+
   useEffect(() => {
-    const searchPaciente = pacientes.find((paciente) => paciente.id === parseInt(pacienteID))
-    handlePaciente(searchPaciente)
+    const searchPaciente = () => {
+      const searchPaciente = pacientes.find((paciente) => paciente.id === parseInt(pacienteID))
+      handlePaciente(searchPaciente)
+      setPacienteLoaded(true)
+      setLoading(false)
+    }
+
+    searchPaciente()
   }, [pacienteID, citasStore])
 
   useEffect(() => {
     const updateSessions = async () => {
-      await getSesiones(paciente)
+      const pacienteID = paciente.id
+      await getSesiones(pacienteID)
     }
-    updateSessions()
+    if (pacienteLoaded) {
+      updateSessions()
+    }
   }, [sesionesStore.length])
+
+  if (loading) {
+    return <Loading />
+  }
 
   return (
     <>
@@ -118,8 +149,8 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
           <>
             <h1 className="text-3xl font-bold">{paciente.nombre_completo}</h1>
             <div className="flex gap-3">
-              <p>{paciente.cedula}</p>
-              <p>{paciente.telefono}</p>
+              <p>{paciente.cedula}</p> |<p>{paciente.telefono}</p> |
+              <p>{`${getAge(paciente['fecha_de_nacimiento'])} años`}</p>
             </div>
             <div className="mt-3 flex gap-5">
               <button

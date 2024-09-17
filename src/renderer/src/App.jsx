@@ -7,6 +7,7 @@ import Paciente from './components/Paciente/Paciente'
 import ModalAccount from './components/Modal/ModalContainer'
 import DisplayFacialHistory from './components/Display_Data/History_Facial/DisplayFacial'
 import DisplayCorporalHistory from './components/Display_Data/History_Body/DisplayCorporal'
+import Loading from './components/UI/Loading/Loading'
 
 import useCitas from './store/citasStore'
 import usePaciente from './store/pacienteStore'
@@ -18,13 +19,19 @@ function App() {
   const [isModalSessionOpen, setIsModalSessionOpen] = useState(false)
   const [newHistoryAction, setNewHistoryAction] = useState('')
   const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const getPacientes = usePaciente((state) => state.getPacientes)
   const getCitas = useCitas((state) => state.getCitas)
 
   useEffect(() => {
-    getPacientes()
-    getCitas()
+    const getInfo = async () => {
+      await getPacientes()
+      await getCitas()
+      setLoading(false)
+    }
+
+    getInfo()
   }, [])
 
   const handleToggleNewPatientModal = () => {
@@ -42,6 +49,10 @@ function App() {
 
   const handleToggleNewSessionModal = () => {
     setIsModalSessionOpen(!isModalSessionOpen)
+  }
+
+  if (loading) {
+    return <Loading />
   }
 
   return (
