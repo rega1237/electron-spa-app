@@ -12,22 +12,21 @@ const Birthdays = () => {
 
     const birthdays = pacientes.filter((paciente) => {
       const birthday = new Date(paciente.fecha_de_nacimiento)
-      console.log(birthday.getMonth() === currentMonth)
       return birthday.getMonth() === currentMonth
     })
-
-    console.log(birthdays)
 
     setBirthdays(birthdays)
   }, [])
 
   return (
     <>
+    <h3 className='text-xl font-bold text-primary-foreground'>Cumeplañeros del mes</h3>
       {birthdays.map((birthday) => (
-        <div key={birthday.id}>
+        <div key={birthday.id} className='mt-4'>
           <BirthdayCard birthday={birthday} />
         </div>
       ))}
+      {birthdays.length === 0 && <p className='mt-4'>No hay cumpleañeros</p> }
     </>
   )
 }

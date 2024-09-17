@@ -104,7 +104,7 @@ const BodyHistory = ({ handleToggleModal, newHistoryAction }) => {
                 <>
                   <InputText
                     item={item}
-                    key={index}
+                    key={`${index}_alergias`}
                     onChange={(e) => handleText(e, alergiasForm, setAlergias)}
                     value={alergiasForm[item]}
                   />
@@ -115,7 +115,7 @@ const BodyHistory = ({ handleToggleModal, newHistoryAction }) => {
             {Object.keys(bodyClinicBackground).map((item, index) => {
               return (
                 <InputCheckbox
-                  key={index}
+                  key={`${index}_clinic`}
                   item={item}
                   onChange={(e) => {
                     handleCheckBox(e, bodyClinic, setBodyClinic)
@@ -135,7 +135,7 @@ const BodyHistory = ({ handleToggleModal, newHistoryAction }) => {
                 return (
                   <InputText
                     item={item}
-                    key={index}
+                    key={`${index}_motivo`}
                     onChange={(e) => {
                       handleText(e, motivo, setMotivo)
                     }}
@@ -146,7 +146,7 @@ const BodyHistory = ({ handleToggleModal, newHistoryAction }) => {
 
               return (
                 <InputCheckbox
-                  key={index}
+                  key={`${index}_motivo`}
                   item={item}
                   onChange={(e) => {
                     handleCheckBox(e, motivo, setMotivo)
@@ -167,7 +167,7 @@ const BodyHistory = ({ handleToggleModal, newHistoryAction }) => {
               return (
                 <InputText
                   item={item}
-                  key={index}
+                  key={`${index}_ant_quirur`}
                   onChange={(e) => {
                     handleText(e, antecedentesQuirurgicosForm, setAntecedentesQuirurgicos)
                   }}

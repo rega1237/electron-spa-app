@@ -50,7 +50,6 @@ const Paciente = ({ toggleNewHistory, newHistoryAction }) => {
 
   const handlePaciente = async (paciente) => {
     const pacienteID = paciente.id
-    console.log(pacienteID)
     await setPaciente(paciente)
     await getHistoriaFacial(paciente)
     await getHistoriaCorporal(paciente)

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 
 const BirthdayCard = ({ birthday }) => {
-  console.log(birthday)
   return (
     <>
       <div className="flex w-full max-w-md flex-col rounded-xl bg-primary-foreground p-4 text-white shadow-lg">

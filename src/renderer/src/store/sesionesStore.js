@@ -85,7 +85,6 @@ export const useSesion = create((set, get) => ({
   },
   editSesionFacial: async (id, notas) => {
     try {
-      console.log('hola edit')
       await turso.execute({
         sql: `UPDATE sesion_facial SET notas = :notas WHERE id = ${id}`,
         args: { notas: notas }
@@ -112,7 +111,6 @@ export const useSesion = create((set, get) => ({
   },
   editSesionCorporal: async (data) => {
     try {
-      console.log(data)
       const keys = Object.keys(data)
         .map((key) => `${key} = :${key}`)
         .join(', ')

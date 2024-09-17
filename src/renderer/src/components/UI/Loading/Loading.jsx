@@ -2,12 +2,12 @@ import logo from '../../../assets/images/logo.webp'
 
 const Loading = () => {
   return (
-    <div class="flex h-[100vh] w-full flex-col items-center justify-center">
+    <div className="flex h-[100vh] w-full flex-col items-center justify-center">
       <img className="w-[200px]" src={logo} alt="logo pro salud spa" />
-      <div class="flex items-center justify-center space-x-1 text-sm text-gray-700">
+      <div className="flex items-center justify-center space-x-1 text-sm text-gray-700">
         <svg
           fill="none"
-          class="h-6 w-6 animate-spin"
+          className="h-6 w-6 animate-spin"
           viewBox="0 0 32 32"
           xmlns="http://www.w3.org/2000/svg"
         >
