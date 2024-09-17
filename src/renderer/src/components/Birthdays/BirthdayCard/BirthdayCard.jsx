@@ -16,7 +16,7 @@ const BirthdayCard = ({ birthday }) => {
             <p>{birthday['fecha_de_nacimiento']}</p>
           </div>
         </div>
-        <div className='mt-3'>
+        <div className="mt-3">
           <p>{birthday['telefono']}</p>
         </div>
       </div>

@@ -35,6 +35,7 @@ const BodySession = ({ handleToggleModal, action, sesion }) => {
 
     const data = {
       ...(action === 'edit' && { id: sesion.id }),
+      paciente_id: paciente.id,
       peso: medidasForm.Peso,
       cintura: medidasForm.Cintura,
       busto: medidasForm.Busto,
@@ -49,8 +50,7 @@ const BodySession = ({ handleToggleModal, action, sesion }) => {
       prox_sesion: nextSesion,
       notas: notas,
       sesion: 'Corporal',
-      fecha: date,
-      ...(action != 'edit' && { paciente_id: paciente.id })
+      ...(action === 'edit' ? { fecha: sesion.fecha } : { fecha: date })
     }
 
     if (action === 'edit') {

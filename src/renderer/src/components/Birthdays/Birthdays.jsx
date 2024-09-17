@@ -24,7 +24,7 @@ const Birthdays = () => {
   return (
     <>
       {birthdays.map((birthday) => (
-        <div key={birthday.id} >
+        <div key={birthday.id}>
           <BirthdayCard birthday={birthday} />
         </div>
       ))}
